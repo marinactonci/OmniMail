@@ -26,7 +26,7 @@ import { signInFormSchema } from "@/schemas/auth";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
 
 export default function SignInPage() {
@@ -58,7 +58,7 @@ export default function SignInPage() {
           setIsLoading(false);
           form.reset();
           form.clearErrors();
-          router.push("/");
+          redirect("/");
         },
         onError: (ctx) => {
           setIsLoading(false);
@@ -119,7 +119,7 @@ export default function SignInPage() {
               {isLoading ? (
                 <LoaderCircle className="animate-spin" />
               ) : (
-                "Sign up"
+                "Submit"
               )}
             </Button>
           </form>

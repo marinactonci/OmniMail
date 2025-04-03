@@ -27,7 +27,7 @@ import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default function SignUpPage() {
   const form = useForm<z.infer<typeof signUpFormSchema>>({
@@ -42,8 +42,6 @@ export default function SignUpPage() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
     const { firstName, lastName, email, password } = values;
@@ -62,13 +60,13 @@ export default function SignUpPage() {
           setIsLoading(false);
           form.reset();
           form.clearErrors();
-          router.push("/sign-in")
+          redirect("/sign-in");
         },
         onError: (ctx) => {
           setIsLoading(false);
           toast("Failed to sign up", {
             description: ctx.error.message,
-            closeButton: true
+            closeButton: true,
           });
         },
       }
@@ -164,7 +162,7 @@ export default function SignUpPage() {
               {isLoading ? (
                 <LoaderCircle className="animate-spin" />
               ) : (
-                "Sign up"
+                "Submit"
               )}
             </Button>
           </form>

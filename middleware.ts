@@ -1,20 +1,19 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-import { auth } from './lib/auth'
+import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const session = await auth.handler(request)
+  // Use direct cookie access since it's working
+  const sessionCookie = request.cookies.get("better-auth.session_token");
 
-  // If the user is logged in and trying to access an auth route, redirect to home
-  if (session) {
-    return NextResponse.redirect(new URL('/', request.url))
+  // If user has a valid session cookie and is trying to access auth pages,
+  // redirect them to the homepage
+  if (sessionCookie) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // Continue with the request if no redirection is needed
-  return NextResponse.next()
+  // If no session, allow access to sign-in and sign-up pages
+  return NextResponse.next();
 }
 
-// Configure which paths this middleware will run on
 export const config = {
-  matcher: ['/sign-in', '/sign-up']
-}
+  matcher: ["/sign-in", "/sign-up"],
+};
