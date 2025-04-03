@@ -22,11 +22,11 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { signUpSchema } from "@/schemas/sign-up";
+import { signUpFormSchema } from "@/schemas/auth";
 
 export default function SignUpPage() {
-  const form = useForm<z.infer<typeof signUpSchema>>({
-    resolver: zodResolver(signUpSchema),
+  const form = useForm<z.infer<typeof signUpFormSchema>>({
+    resolver: zodResolver(signUpFormSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -36,7 +36,7 @@ export default function SignUpPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof signUpSchema>) {
+  function onSubmit(values: z.infer<typeof signUpFormSchema>) {
     console.log(values);
   }
   return (
@@ -125,7 +125,7 @@ export default function SignUpPage() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button className="w-full" type="submit">Submit</Button>
           </form>
         </Form>
       </CardContent>
