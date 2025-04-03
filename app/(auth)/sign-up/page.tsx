@@ -23,6 +23,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signUpFormSchema } from "@/schemas/auth";
+import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
+import { LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
   const form = useForm<z.infer<typeof signUpFormSchema>>({
@@ -36,8 +41,38 @@ export default function SignUpPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof signUpFormSchema>) {
-    console.log(values);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+
+  async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
+    const { firstName, lastName, email, password } = values;
+    await authClient.signUp.email(
+      {
+        email,
+        password,
+        name: `${firstName} ${lastName}`,
+        callbackURL: "/sign-in",
+      },
+      {
+        onRequest: (ctx) => {
+          setIsLoading(true);
+        },
+        onSuccess: (ctx) => {
+          setIsLoading(false);
+          form.reset();
+          form.clearErrors();
+          router.push("/sign-in")
+        },
+        onError: (ctx) => {
+          setIsLoading(false);
+          toast("Failed to sign up", {
+            description: ctx.error.message,
+            closeButton: true
+          });
+        },
+      }
+    );
   }
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -125,7 +160,13 @@ export default function SignUpPage() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">Submit</Button>
+            <Button className="w-full" type="submit">
+              {isLoading ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                "Sign up"
+              )}
+            </Button>
           </form>
         </Form>
       </CardContent>
