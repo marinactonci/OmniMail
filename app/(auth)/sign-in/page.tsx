@@ -23,6 +23,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signInFormSchema } from "@/schemas/auth";
+import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { LoaderCircle } from "lucide-react";
 
 export default function SignInPage() {
   const form = useForm<z.infer<typeof signInFormSchema>>({
@@ -33,8 +38,37 @@ export default function SignInPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof signInFormSchema>) {
-    console.log(values);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+
+  async function onSubmit(values: z.infer<typeof signInFormSchema>) {
+    const { email, password } = values;
+    await authClient.signIn.email(
+      {
+        email,
+        password,
+        callbackURL: "/",
+      },
+      {
+        onRequest: () => {
+          setIsLoading(true);
+        },
+        onSuccess: () => {
+          setIsLoading(false);
+          form.reset();
+          form.clearErrors();
+          router.push("/");
+        },
+        onError: (ctx) => {
+          setIsLoading(false);
+          toast("Failed to sign in", {
+            description: ctx.error.message,
+            closeButton: true,
+          });
+        },
+      }
+    );
   }
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -54,7 +88,11 @@ export default function SignInPage() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="john@example.com" {...field} />
+                    <Input
+                      type="email"
+                      placeholder="john@example.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -67,13 +105,23 @@ export default function SignInPage() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="Enter your password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter your password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">Submit</Button>
+            <Button className="w-full" type="submit">
+              {isLoading ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                "Sign up"
+              )}
+            </Button>
           </form>
         </Form>
       </CardContent>

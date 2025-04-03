@@ -55,10 +55,10 @@ export default function SignUpPage() {
         callbackURL: "/sign-in",
       },
       {
-        onRequest: (ctx) => {
+        onRequest: () => {
           setIsLoading(true);
         },
-        onSuccess: (ctx) => {
+        onSuccess: () => {
           setIsLoading(false);
           form.reset();
           form.clearErrors();
