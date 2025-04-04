@@ -1,9 +1,10 @@
+import LinkAccountButton from "@/components/link-account-button";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default async function Home() {
+export default async function MailPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -30,6 +31,7 @@ export default async function Home() {
 
   return (
     <div className="container mx-auto h-screen grid place-items-center">
+      <LinkAccountButton />
       <form
         action={async () => {
           "use server";
