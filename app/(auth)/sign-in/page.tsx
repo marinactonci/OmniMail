@@ -26,10 +26,12 @@ import { signInFormSchema } from "@/schemas/auth";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { toast } from "sonner";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
 
 export default function SignInPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const session = authClient.useSession();
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
@@ -37,10 +39,6 @@ export default function SignInPage() {
       password: "",
     },
   });
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof signInFormSchema>) {
     const { email, password } = values;
@@ -71,9 +69,7 @@ export default function SignInPage() {
     );
   }
 
-  const session = authClient.useSession();
-
-  if (session) {
+  if (session.data) {
     redirect("/mail");
   }
 
@@ -123,11 +119,7 @@ export default function SignInPage() {
               )}
             />
             <Button className="w-full" type="submit">
-              {isLoading ? (
-                <LoaderCircle className="animate-spin" />
-              ) : (
-                "Submit"
-              )}
+              {isLoading ? <LoaderCircle className="animate-spin" /> : "Submit"}
             </Button>
           </form>
         </Form>

@@ -30,6 +30,8 @@ import { toast } from "sonner";
 import { redirect } from "next/navigation";
 
 export default function SignUpPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const session = authClient.useSession();
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -40,8 +42,6 @@ export default function SignUpPage() {
       repeatPassword: "",
     },
   });
-
-  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
     const { firstName, lastName, email, password } = values;
@@ -73,9 +73,7 @@ export default function SignUpPage() {
     );
   }
 
-  const session = authClient.useSession();
-
-  if (session) {
+  if (session.data) {
     redirect("/mail");
   }
 
