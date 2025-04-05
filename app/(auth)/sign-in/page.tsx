@@ -70,6 +70,13 @@ export default function SignInPage() {
       }
     );
   }
+
+  const session = authClient.useSession();
+
+  if (session) {
+    redirect("/mail");
+  }
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>

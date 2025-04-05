@@ -72,6 +72,13 @@ export default function SignUpPage() {
       }
     );
   }
+
+  const session = authClient.useSession();
+
+  if (session) {
+    redirect("/mail");
+  }
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
@@ -159,11 +166,7 @@ export default function SignUpPage() {
               )}
             />
             <Button className="w-full" type="submit">
-              {isLoading ? (
-                <LoaderCircle className="animate-spin" />
-              ) : (
-                "Submit"
-              )}
+              {isLoading ? <LoaderCircle className="animate-spin" /> : "Submit"}
             </Button>
           </form>
         </Form>
