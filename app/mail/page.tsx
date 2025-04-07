@@ -10,6 +10,9 @@ export default async function MailPage() {
     headers: await headers(),
   });
 
+  // add 4 seconds delay
+  //await new Promise((resolve) => setTimeout(resolve, 4000));
+
   if (!session) {
     redirect("/sign-in");
   }

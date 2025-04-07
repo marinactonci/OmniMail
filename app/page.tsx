@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight,
@@ -36,8 +35,8 @@ export default function HomePage() {
                     <AuroraText>Reimagined with AI</AuroraText>
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    MailMind uses advanced AI to organize, prioritize, and
-                    respond to your emails, saving you hours every week.
+                    OmniMail enhances your email experience with AI-powered text generation,
+                    smart autocomplete, and a chatbot that answers questions about your inbox.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -66,7 +65,7 @@ export default function HomePage() {
                     src="/placeholder.svg?height=600&width=800"
                     width={800}
                     height={600}
-                    alt="MailMind Dashboard"
+                    alt="OmniMail Dashboard"
                     className="rounded-lg object-cover"
                   />
                 </div>
@@ -89,7 +88,7 @@ export default function HomePage() {
                   Smart Features for Smarter Email Management
                 </h2>
                 <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                  MailMind combines cutting-edge AI with intuitive design to
+                  OmniMail combines cutting-edge AI with intuitive design to
                   transform how you handle email.
                 </p>
               </div>
@@ -172,8 +171,8 @@ export default function HomePage() {
                   Simplify Your Email Workflow
                 </h2>
                 <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                  MailMind seamlessly integrates with your existing email
-                  accounts to provide a smarter experience.
+                  OmniMail combines cutting-edge AI with intuitive keyboard shortcuts
+                  to transform how you handle email.
                 </p>
               </div>
             </div>
@@ -182,7 +181,7 @@ export default function HomePage() {
                 src="/placeholder.svg?height=600&width=800"
                 width={800}
                 height={600}
-                alt="MailMind Interface"
+                alt="OmniMail Interface"
                 className="rounded-xl object-cover shadow-xl"
               />
               <div className="space-y-8">
@@ -204,11 +203,11 @@ export default function HomePage() {
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-xl font-bold">
-                      AI Learns Your Preferences
+                      AI Learns Your Style
                     </h3>
                     <p className="text-muted-foreground">
-                      Our AI analyzes your email patterns and communication
-                      style to provide personalized assistance.
+                      Our AI analyzes your writing style to provide better text suggestions
+                      and more relevant autocomplete options.
                     </p>
                   </div>
                 </div>
@@ -233,7 +232,7 @@ export default function HomePage() {
                   <div className="space-y-1">
                     <h3 className="text-xl font-bold">Save Hours Every Week</h3>
                     <p className="text-muted-foreground">
-                      Reclaim your time as MailMind handles routine emails and
+                      Reclaim your time as OmniMail handles routine emails and
                       helps you respond faster to important ones.
                     </p>
                   </div>
@@ -263,120 +262,126 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-3">
-              <div className="flex flex-col rounded-xl border bg-background p-6 shadow-sm">
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold">Starter</h3>
-                  <p className="text-muted-foreground">
-                    Perfect for individuals and small email volumes.
-                  </p>
+              <div className="flex flex-col justify-between rounded-xl border bg-background p-6 shadow-sm">
+                <div>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-bold">Starter</h3>
+                    <p className="text-muted-foreground">
+                      Perfect for individuals and small email volumes.
+                    </p>
+                  </div>
+                  <div className="mt-4 flex items-baseline text-3xl font-bold">
+                    $9
+                    <span className="text-muted-foreground text-sm font-normal">
+                      /month
+                    </span>
+                  </div>
+                  <ul className="mt-6 space-y-3">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>1 email account</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Basic AI text generation</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Standard keyboard shortcuts</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>5GB storage</span>
+                    </li>
+                  </ul>
                 </div>
-                <div className="mt-4 flex items-baseline text-3xl font-bold">
-                  $9
-                  <span className="text-muted-foreground text-sm font-normal">
-                    /month
-                  </span>
-                </div>
-                <ul className="mt-6 space-y-3">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>1 email account</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>Basic AI prioritization</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>Smart reply suggestions</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>5GB storage</span>
-                  </li>
-                </ul>
                 <Button className="mt-8">Get Started</Button>
               </div>
-              <div className="flex flex-col rounded-xl border bg-background p-6 shadow-xl relative">
+              <div className="flex flex-col justify-between rounded-xl border bg-background p-6 shadow-xl relative">
                 <div className="absolute -top-4 left-0 right-0 mx-auto w-fit rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
                   Most Popular
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold">Professional</h3>
-                  <p className="text-muted-foreground">
-                    Ideal for professionals with high email volume.
-                  </p>
+                <div>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-bold">Professional</h3>
+                    <p className="text-muted-foreground">
+                      Ideal for professionals with high email volume.
+                    </p>
+                  </div>
+                  <div className="mt-4 flex items-baseline text-3xl font-bold">
+                    $19
+                    <span className="text-muted-foreground text-sm font-normal">
+                      /month
+                    </span>
+                  </div>
+                  <ul className="mt-6 space-y-3">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>3 email accounts</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Advanced AI text generation</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Custom keyboard shortcuts</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Email chatbot assistant</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>20GB storage</span>
+                    </li>
+                  </ul>
                 </div>
-                <div className="mt-4 flex items-baseline text-3xl font-bold">
-                  $19
-                  <span className="text-muted-foreground text-sm font-normal">
-                    /month
-                  </span>
-                </div>
-                <ul className="mt-6 space-y-3">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>3 email accounts</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>Advanced AI prioritization</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>Custom response templates</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>Email analytics dashboard</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>20GB storage</span>
-                  </li>
-                </ul>
                 <Button className="mt-8" variant="default">
                   Get Started
                 </Button>
               </div>
-              <div className="flex flex-col rounded-xl border bg-background p-6 shadow-sm">
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold">Enterprise</h3>
-                  <p className="text-muted-foreground">
-                    For teams and businesses with advanced needs.
-                  </p>
+              <div className="flex flex-col justify-between rounded-xl border bg-background p-6 shadow-sm">
+                <div>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-bold">Enterprise</h3>
+                    <p className="text-muted-foreground">
+                      For teams and businesses with advanced needs.
+                    </p>
+                  </div>
+                  <div className="mt-4 flex items-baseline text-3xl font-bold">
+                    $49
+                    <span className="text-muted-foreground text-sm font-normal">
+                      /month
+                    </span>
+                  </div>
+                  <ul className="mt-6 space-y-3">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Unlimited email accounts</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Premium AI features</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Team collaboration tools</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Advanced chatbot capabilities</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>100GB storage</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Priority support</span>
+                    </li>
+                  </ul>
                 </div>
-                <div className="mt-4 flex items-baseline text-3xl font-bold">
-                  $49
-                  <span className="text-muted-foreground text-sm font-normal">
-                    /month
-                  </span>
-                </div>
-                <ul className="mt-6 space-y-3">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>Unlimited email accounts</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>Premium AI features</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>Team collaboration tools</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>Advanced analytics & reporting</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>100GB storage</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>Priority support</span>
-                  </li>
-                </ul>
                 <Button className="mt-8" variant="outline">
                   Contact Sales
                 </Button>
@@ -396,7 +401,7 @@ export default function HomePage() {
                   Loved by Professionals Worldwide
                 </h2>
                 <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                  See what our users are saying about how MailMind has
+                  See what our users are saying about how OmniMail has
                   transformed their email experience.
                 </p>
               </div>
@@ -419,7 +424,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <p className="mt-4 text-muted-foreground">
-                  "MailMind has completely transformed how I handle my inbox. I
+                  "OmniMail has completely transformed how I handle my inbox. I
                   save at least 5 hours every week and never miss important
                   emails anymore."
                 </p>
@@ -458,7 +463,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <p className="mt-4 text-muted-foreground">
-                  "As a founder, I was drowning in emails. MailMind's AI
+                  "As a founder, I was drowning in emails. OmniMail's AI
                   prioritization has been a game-changer for my productivity and
                   response time."
                 </p>

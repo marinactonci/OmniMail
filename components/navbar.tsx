@@ -21,16 +21,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { ThemeToggle } from "./theme-toggle";
-import { useEffect } from "react";
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = authClient.useSession();
 
-  useEffect(() => {}, [session]);
-
-  // Handle sign out with proper state update
   const handleSignOut = async () => {
     await authClient.signOut();
     router.push("/sign-in");
