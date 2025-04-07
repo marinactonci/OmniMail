@@ -63,12 +63,13 @@ model Account {
 }
 
 model EmailAccount {
-  id           String  @id @default(cuid())
-  userId       String
-  accessToken  String  @unique
-  emailAddress String  @unique
-  name         String
-  user         User    @relation(fields: [userId], references: [id])
+  id             String  @id @default(cuid())
+  userId         String
+  accessToken    String  @unique
+  emailAddress   String  @unique
+  name           String
+  nextDeltaToken String?
+  user           User    @relation(fields: [userId], references: [id])
 
   @@map("email_account")
 }
