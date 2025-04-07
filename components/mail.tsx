@@ -35,6 +35,11 @@ import { useMail } from "@/lib/use-mail";
 import { Button } from "./ui/button";
 
 interface MailProps {
+  accounts: {
+    label: string;
+    email: string;
+    icon: React.ReactNode;
+  }[];
   mails: Mail[];
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
@@ -42,6 +47,7 @@ interface MailProps {
 }
 
 export function Mail({
+  accounts,
   mails,
   defaultLayout = [20, 32, 48],
   defaultCollapsed = false,

@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
 
-export default async function HomePage() {
+export default async function MailPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
