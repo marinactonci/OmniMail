@@ -1,4 +1,5 @@
 import LinkAccountButton from "@/components/link-account-button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -32,6 +33,7 @@ export default async function MailPage() {
   return (
     <div className="container mx-auto h-screen grid place-items-center">
       <LinkAccountButton />
+      <ThemeToggle />
       <form
         action={async () => {
           "use server";

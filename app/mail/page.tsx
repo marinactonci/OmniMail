@@ -1,11 +1,14 @@
-import Mail from "@/components/mail";
+import { Mail } from "@/components/mail";
+import { accounts, mails } from "@/lib/data";
 import React from "react";
 
 export default function HomePage() {
   return (
     <Mail
-      defaultLayout={[20, 32, 48]}
-      defaultCollapsed={false}
+      accounts={accounts}
+      mails={mails}
+      defaultLayout={undefined}
+      defaultCollapsed={undefined}
       navCollapsedSize={4}
     />
   );
