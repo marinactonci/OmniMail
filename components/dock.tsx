@@ -2,7 +2,7 @@
 
 import { CreditCard, Layers, MessageSquareQuote, Workflow, ArrowUp } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Tooltip,
@@ -26,6 +26,31 @@ const DATA = {
 };
 
 export function DockNav() {
+  const [isVisible, setIsVisible] = useState(true);
+  const dockRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const footer = document.querySelector('footer');
+    if (!footer || !dockRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Hide dock when footer is in view
+        setIsVisible(!entry.isIntersecting);
+      },
+      {
+        rootMargin: '100px 0px 0px 0px', // Adjust this value as needed
+        threshold: 0
+      }
+    );
+
+    observer.observe(footer);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   // Add smooth scroll handler
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -53,9 +78,11 @@ export function DockNav() {
     }
   };
 
+  if (!isVisible) return null;
+
   return (
     <TooltipProvider>
-      <Dock direction="middle">
+      <Dock direction="middle" ref={dockRef}>
         {DATA.navbar.map((item) => (
           <DockIcon key={item.label}>
             <Tooltip>
