@@ -1,4 +1,4 @@
-import { ComponentProps } from "react";
+import { ComponentProps, useEffect } from "react";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 
 import { cn } from "@/lib/utils";
@@ -14,8 +14,31 @@ interface MailListProps {
 export function MailList({ items }: MailListProps) {
   const [mail, setMail] = useMail();
 
+  // Add keyboard navigation with j/k keys
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!items.length) return;
+      
+      // Find current index
+      const currentIndex = items.findIndex(item => item.id === mail.selected);
+      
+      if (e.key === 'j') {
+        // Move down (next email)
+        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : currentIndex;
+        setMail({ ...mail, selected: items[nextIndex].id });
+      } else if (e.key === 'k') {
+        // Move up (previous email)
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : currentIndex;
+        setMail({ ...mail, selected: items[prevIndex].id });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [items, mail, setMail]);
+
   return (
-    <ScrollArea className="h-screen">
+    <ScrollArea className="h-[calc(100vh-64px-68px-52px)]">
       <div className="flex flex-col gap-2 p-4 pt-0">
         {items.map((item) => (
           <button

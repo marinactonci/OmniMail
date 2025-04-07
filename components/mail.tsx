@@ -13,6 +13,7 @@ import {
   ShoppingCart,
   Trash2,
   Users2,
+  XIcon,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -31,13 +32,9 @@ import { MailList } from "@/components/mail-list";
 import { SideNav } from "@/components/side-nav";
 import { type Mail } from "@/lib/data";
 import { useMail } from "@/lib/use-mail";
+import { Button } from "./ui/button";
 
 interface MailProps {
-  accounts: {
-    label: string;
-    email: string;
-    icon: React.ReactNode;
-  }[];
   mails: Mail[];
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
@@ -45,7 +42,6 @@ interface MailProps {
 }
 
 export function Mail({
-  accounts,
   mails,
   defaultLayout = [20, 32, 48],
   defaultCollapsed = false,
@@ -53,20 +49,7 @@ export function Mail({
 }: MailProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
   const [mail] = useMail();
-  const searchInputRef = React.useRef<HTMLInputElement>(null);
-
-  // Add keyboard shortcut to focus search input
-  React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        searchInputRef.current?.focus();
-      }
-    };
-
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, []);
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -111,10 +94,7 @@ export function Mail({
           >
             <AccountSwitcher
               isCollapsed={isCollapsed}
-              accounts={accounts.map((account) => ({
-                ...account,
-                icon: account.icon?.toString() || "",
-              }))}
+              accounts={[]}
             />
           </div>
           <Separator />
@@ -222,10 +202,22 @@ export function Mail({
                 <div className="relative">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
-                    ref={searchInputRef}
-                    placeholder="Search (⌘K)"
+                    placeholder="Search"
                     className="pl-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                   />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                    onClick={() => setSearchQuery("")}
+                    disabled={!searchQuery}
+                  >
+                    <XIcon className="h-4 w-4" />
+                    <span className="sr-only">Clear</span>
+                  </Button>
                 </div>
               </form>
             </div>

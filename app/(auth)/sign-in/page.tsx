@@ -26,8 +26,9 @@ import { signInFormSchema } from "@/schemas/auth";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { LoaderCircle } from "lucide-react";
+import { useEffect } from "react";
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +40,7 @@ export default function SignInPage() {
       password: "",
     },
   });
+  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof signInFormSchema>) {
     const { email, password } = values;
@@ -46,7 +48,7 @@ export default function SignInPage() {
       {
         email,
         password,
-        callbackURL: "/",
+        callbackURL: "/mail",
       },
       {
         onRequest: () => {
@@ -56,7 +58,7 @@ export default function SignInPage() {
           setIsLoading(false);
           form.reset();
           form.clearErrors();
-          redirect("/");
+          router.push("/mail");
         },
         onError: (ctx) => {
           setIsLoading(false);
@@ -69,9 +71,11 @@ export default function SignInPage() {
     );
   }
 
-  if (session.data) {
-    redirect("/mail");
-  }
+  useEffect(() => {
+    if (session.data) {
+      router.push("/mail");
+    }
+  }, [session.data]);
 
   return (
     <Card className="w-full max-w-md mx-auto">

@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useTheme } from "next-themes";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Mail,
   LogIn,
@@ -22,10 +21,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { ThemeToggle } from "./theme-toggle";
+import { useEffect } from "react";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { data: session } = authClient.useSession();
+
+  useEffect(() => {}, [session]);
+
+  // Handle sign out with proper state update
+  const handleSignOut = async () => {
+    await authClient.signOut();
+    router.push("/sign-in");
+  };
 
   return (
     <nav className="border-b h-16 flex items-center px-4 sticky top-0 bg-background z-10">
@@ -37,7 +46,7 @@ export default function Navbar() {
         </Link>
 
         {/* Navigation Links */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2">
           <Link
             href="/"
             className={`flex items-center gap-1 ${
@@ -80,6 +89,8 @@ export default function Navbar() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <div className="text-sm px-2 py-1.5">{session?.user?.name}</div>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <User className="mr-2 h-4 w-4" />
                   <span>Profile</span>
@@ -89,7 +100,7 @@ export default function Navbar() {
                   <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Logout</span>
                 </DropdownMenuItem>
