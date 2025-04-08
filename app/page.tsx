@@ -412,27 +412,29 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
-                <div className="flex flex-col rounded-xl border bg-background p-6 shadow-sm">
-                  <div className="flex items-center gap-4">
-                    <Image
-                      src="/placeholder.svg?height=100&width=100"
-                      width={50}
-                      height={50}
-                      alt="User Avatar"
-                      className="rounded-full"
-                    />
-                    <div>
-                      <h4 className="font-bold">Sarah Johnson</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Marketing Director
-                      </p>
+                <div className="flex flex-col justify-between rounded-xl border bg-background p-6 shadow-sm">
+                  <div>
+                    <div className="flex items-center gap-4">
+                      <Image
+                        src="/placeholder.svg?height=100&width=100"
+                        width={50}
+                        height={50}
+                        alt="User Avatar"
+                        className="rounded-full"
+                      />
+                      <div>
+                        <h4 className="font-bold">Sarah Johnson</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Marketing Director
+                        </p>
+                      </div>
                     </div>
+                    <p className="mt-4 text-muted-foreground">
+                      "OmniMail has completely transformed how I handle my
+                      inbox. I save at least 5 hours every week and never miss
+                      important emails anymore."
+                    </p>
                   </div>
-                  <p className="mt-4 text-muted-foreground">
-                    "OmniMail has completely transformed how I handle my inbox.
-                    I save at least 5 hours every week and never miss important
-                    emails anymore."
-                  </p>
                   <div className="mt-4 flex">
                     {[...Array(5)].map((_, i) => (
                       <svg
@@ -451,27 +453,29 @@ export default function HomePage() {
                     ))}
                   </div>
                 </div>
-                <div className="flex flex-col rounded-xl border bg-background p-6 shadow-sm">
-                  <div className="flex items-center gap-4">
-                    <Image
-                      src="/placeholder.svg?height=100&width=100"
-                      width={50}
-                      height={50}
-                      alt="User Avatar"
-                      className="rounded-full"
-                    />
-                    <div>
-                      <h4 className="font-bold">Michael Chen</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Startup Founder
-                      </p>
+                <div className="flex flex-col justify-between rounded-xl border bg-background p-6 shadow-sm">
+                  <div>
+                    <div className="flex items-center gap-4">
+                      <Image
+                        src="/placeholder.svg?height=100&width=100"
+                        width={50}
+                        height={50}
+                        alt="User Avatar"
+                        className="rounded-full"
+                      />
+                      <div>
+                        <h4 className="font-bold">Michael Chen</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Startup Founder
+                        </p>
+                      </div>
                     </div>
+                    <p className="mt-4 text-muted-foreground">
+                      "As a founder, I was drowning in emails. OmniMail's AI
+                      prioritization has been a game-changer for my productivity
+                      and response time."
+                    </p>
                   </div>
-                  <p className="mt-4 text-muted-foreground">
-                    "As a founder, I was drowning in emails. OmniMail's AI
-                    prioritization has been a game-changer for my productivity
-                    and response time."
-                  </p>
                   <div className="mt-4 flex">
                     {[...Array(5)].map((_, i) => (
                       <svg
@@ -490,27 +494,29 @@ export default function HomePage() {
                     ))}
                   </div>
                 </div>
-                <div className="flex flex-col rounded-xl border bg-background p-6 shadow-sm">
-                  <div className="flex items-center gap-4">
-                    <Image
-                      src="/placeholder.svg?height=100&width=100"
-                      width={50}
-                      height={50}
-                      alt="User Avatar"
-                      className="rounded-full"
-                    />
-                    <div>
-                      <h4 className="font-bold">Emily Rodriguez</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Product Manager
-                      </p>
+                <div className="flex flex-col justify-between rounded-xl border bg-background p-6 shadow-sm">
+                  <div>
+                    <div className="flex items-center gap-4">
+                      <Image
+                        src="/placeholder.svg?height=100&width=100"
+                        width={50}
+                        height={50}
+                        alt="User Avatar"
+                        className="rounded-full"
+                      />
+                      <div>
+                        <h4 className="font-bold">Emily Rodriguez</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Product Manager
+                        </p>
+                      </div>
                     </div>
+                    <p className="mt-4 text-muted-foreground">
+                      "The smart templates and response suggestions have made my
+                      communication more efficient and professional. I can't
+                      imagine going back."
+                    </p>
                   </div>
-                  <p className="mt-4 text-muted-foreground">
-                    "The smart templates and response suggestions have made my
-                    communication more efficient and professional. I can't
-                    imagine going back."
-                  </p>
                   <div className="mt-4 flex">
                     {[...Array(5)].map((_, i) => (
                       <svg
