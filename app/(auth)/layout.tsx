@@ -5,7 +5,7 @@ export default function AuthLayout({
 }>) {
   return (
     <main>
-      <div className="h-screen grid place-items-center">
+      <div className="min-h-[calc(100vh-64px)] grid place-items-center">
         {children}
       </div>
     </main>
