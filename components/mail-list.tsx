@@ -18,10 +18,10 @@ export function MailList({ items }: MailListProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!items.length) return;
-      
+
       // Find current index
       const currentIndex = items.findIndex(item => item.id === mail.selected);
-      
+
       if (e.key === 'j') {
         // Move down (next email)
         const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : currentIndex;
@@ -44,8 +44,8 @@ export function MailList({ items }: MailListProps) {
           <button
             key={item.id}
             className={cn(
-              "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
-              mail.selected === item.id && "bg-muted"
+              "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-primary/5",
+              mail.selected === item.id && "bg-primary/10 hover:bg-primary/10"
             )}
             onClick={() =>
               setMail({

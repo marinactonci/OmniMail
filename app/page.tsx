@@ -79,7 +79,7 @@ export default function HomePage() {
 
           <section
             id="features"
-            className="w-full bg-muted/50 py-12 md:py-24 lg:py-32 rounded-xl"
+            className="w-full bg-primary/10 py-12 md:py-24 lg:py-32 rounded-xl"
           >
             <div className="container px-4 md:px-6">
               <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -249,7 +249,7 @@ export default function HomePage() {
 
           <section
             id="pricing"
-            className="w-full bg-muted/50 py-12 md:py-24 lg:py-32 rounded-xl"
+            className="w-full bg-primary/10 py-12 md:py-24 lg:py-32 rounded-xl"
           >
             <div className="container px-4 md:px-6">
               <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -533,7 +533,7 @@ export default function HomePage() {
             </div>
           </section>
 
-          <section className="w-full bg-muted/50 py-12 md:py-24 lg:py-32 rounded-t-xl">
+          <section className="w-full bg-primary/10 py-12 md:py-24 lg:py-32 rounded-t-xl">
             <div className="container px-4 md:px-6">
               <div className="flex flex-col items-center justify-center space-y-4 text-center">
                 <div className="space-y-2">
