@@ -33,6 +33,7 @@ import { SideNav } from "@/components/side-nav";
 import { type Mail } from "@/lib/data";
 import { useMail } from "@/lib/use-mail";
 import { Button } from "./ui/button";
+import { getAurinkoAuthUrl } from "@/lib/aurinko";
 
 interface MailProps {
   accounts: {
@@ -101,6 +102,10 @@ export function Mail({
             <AccountSwitcher
               isCollapsed={isCollapsed}
               accounts={[]}
+              onAddAccount={async () => {
+                const authUrl = await getAurinkoAuthUrl("Office365");
+                window.location.href = authUrl;
+              }}
             />
           </div>
           <Separator />
