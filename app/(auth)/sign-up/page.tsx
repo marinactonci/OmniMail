@@ -34,11 +34,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 
 export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const session = authClient.useSession();
@@ -67,8 +67,13 @@ export default function SignUpPage() {
         },
         onSuccess: () => {
           setIsLoading(false);
+          setIsRedirecting(true);
           form.reset();
           form.clearErrors();
+          toast.success("Successfully signed up.", {
+            description: "Please sign in to continue.",
+            closeButton: true,
+          })
           redirect("/sign-in");
         },
         onError: (ctx) => {
@@ -212,7 +217,7 @@ export default function SignUpPage() {
               )}
             />
             <Button className="w-full" type="submit">
-              {isLoading ? <LoaderCircle className="animate-spin" /> : "Sign up"}
+              {isLoading ? <LoaderCircle className="animate-spin" /> : isRedirecting ? "Redirecting..." : "Sign up"}
             </Button>
           </form>
         </Form>

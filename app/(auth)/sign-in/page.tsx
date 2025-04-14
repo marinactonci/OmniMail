@@ -26,7 +26,7 @@ import { signInFormSchema } from "@/schemas/auth";
 import { authClient } from "@/lib/auth-client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { LoaderCircle, Eye, EyeOff, GithubIcon } from "lucide-react";
 import {
   Tooltip,
@@ -38,6 +38,7 @@ import Image from "next/image";
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const session = authClient.useSession();
   const form = useForm<z.infer<typeof signInFormSchema>>({
@@ -63,9 +64,14 @@ export default function SignInPage() {
         },
         onSuccess: () => {
           setIsLoading(false);
+          setIsRedirecting(true);
           form.reset();
           form.clearErrors();
-          router.push("/mail");
+          toast.success("Successfully signed in.", {
+            description: "You are being redirected to your inbox.",
+            closeButton: true,
+          });
+          redirect("/mail");
         },
         onError: (ctx) => {
           setIsLoading(false);
@@ -154,7 +160,13 @@ export default function SignInPage() {
               )}
             />
             <Button className="w-full" type="submit">
-              {isLoading ? <LoaderCircle className="animate-spin" /> : "Sign in"}
+              {isLoading ? (
+                <LoaderCircle className="animate-spin" />
+              ) : isRedirecting ? (
+                "Redirecting..."
+              ) : (
+                "Sign in"
+              )}
             </Button>
           </form>
         </Form>
