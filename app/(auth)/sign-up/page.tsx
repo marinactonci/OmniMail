@@ -25,7 +25,7 @@ import { z } from "zod";
 import { signUpFormSchema } from "@/schemas/auth";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
-import { Eye, EyeOff, LoaderCircle } from "lucide-react";
+import { Eye, EyeOff, Github, GithubIcon, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import {
@@ -34,6 +34,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
 export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,8 +45,7 @@ export default function SignUpPage() {
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
       email: "",
       password: "",
       repeatPassword: "",
@@ -52,12 +53,12 @@ export default function SignUpPage() {
   });
 
   async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
-    const { firstName, lastName, email, password } = values;
+    const { name, email, password } = values;
     await authClient.signUp.email(
       {
+        name,
         email,
         password,
-        name: `${firstName} ${lastName}`,
         callbackURL: "/sign-in",
       },
       {
@@ -96,25 +97,12 @@ export default function SignUpPage() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="firstName"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First name</FormLabel>
+                  <FormLabel>Full name</FormLabel>
                   <FormControl>
-                    <Input placeholder="John" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Doe" {...field} />
+                    <Input placeholder="John Doe" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -199,7 +187,9 @@ export default function SignUpPage() {
                               variant="ghost"
                               size="icon"
                               className="absolute right-0 top-0 h-full px-3"
-                              onClick={() => setShowRepeatPassword(!showRepeatPassword)}
+                              onClick={() =>
+                                setShowRepeatPassword(!showRepeatPassword)
+                              }
                             >
                               {showPassword ? (
                                 <EyeOff className="h-4 w-4" />
@@ -209,7 +199,9 @@ export default function SignUpPage() {
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
-                            {showRepeatPassword ? "Hide password" : "Show password"}
+                            {showRepeatPassword
+                              ? "Hide password"
+                              : "Show password"}
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -220,10 +212,35 @@ export default function SignUpPage() {
               )}
             />
             <Button className="w-full" type="submit">
-              {isLoading ? <LoaderCircle className="animate-spin" /> : "Submit"}
+              {isLoading ? <LoaderCircle className="animate-spin" /> : "Sign up"}
             </Button>
           </form>
         </Form>
+        <div className="relative my-6">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 flex items-center"
+          >
+            <div className="w-full border-t border-gray-300" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-card">Or continue with</span>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <Button variant="outline" className="w-1/2">
+            <span className="flex items-center gap-2">
+              <Image src="/google.webp" alt="Google logo" width={20} height={20} />
+              <span>Google</span>
+            </span>
+          </Button>
+          <Button variant="outline" className="w-1/2">
+            <span className="flex items-center gap-2">
+              <GithubIcon className="h-5 w-5" />
+              <span>Github</span>
+            </span>
+          </Button>
+        </div>
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">

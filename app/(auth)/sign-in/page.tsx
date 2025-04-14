@@ -27,13 +27,14 @@ import { authClient } from "@/lib/auth-client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { LoaderCircle, Eye, EyeOff } from "lucide-react";
+import { LoaderCircle, Eye, EyeOff, GithubIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Image from "next/image";
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -153,10 +154,40 @@ export default function SignInPage() {
               )}
             />
             <Button className="w-full" type="submit">
-              {isLoading ? <LoaderCircle className="animate-spin" /> : "Submit"}
+              {isLoading ? <LoaderCircle className="animate-spin" /> : "Sign in"}
             </Button>
           </form>
         </Form>
+        <div className="relative my-6">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 flex items-center"
+          >
+            <div className="w-full border-t border-gray-300" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-card">Or continue with</span>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <Button variant="outline" className="w-1/2">
+            <span className="flex items-center gap-2">
+              <Image
+                src="/google.webp"
+                alt="Google logo"
+                width={20}
+                height={20}
+              />
+              <span>Google</span>
+            </span>
+          </Button>
+          <Button variant="outline" className="w-1/2">
+            <span className="flex items-center gap-2">
+              <GithubIcon className="h-5 w-5" />
+              <span>Github</span>
+            </span>
+          </Button>
+        </div>
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
