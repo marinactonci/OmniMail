@@ -10,22 +10,39 @@ export class Account {
     this.token = token;
   }
 
-  private async startSync() {
-    const response = await axios.post<SyncResponse>(
-      "https://api.aurinko.io/v1/email/sync",
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-        },
-        params: {
-          daysWithin: 2,
-          bodyType: "html",
-        },
+  private async startSync(retryCount = 3) {
+    for (let attempt = 0; attempt < retryCount; attempt++) {
+      try {
+        const response = await axios.post<SyncResponse>(
+          "https://api.aurinko.io/v1/email/sync",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${this.token}`,
+            },
+            params: {
+              daysWithin: 30,
+              bodyType: "html",
+            },
+            // Add timeout configuration
+            timeout: 10000, // 10 seconds
+          }
+        );
+        return response.data;
+      } catch (error) {
+        if (
+          axios.isAxiosError(error) &&
+          (error.code === 'ECONNRESET' || error.code === 'ETIMEDOUT') &&
+          attempt < retryCount - 1
+        ) {
+          // Wait before retry (exponential backoff)
+          await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+          continue;
+        }
+        throw error;
       }
-    );
-
-    return response.data;
+    }
+    throw new Error('Max retry attempts reached');
   }
 
   async getUpdatedEmails({
@@ -59,9 +76,22 @@ export class Account {
   async performInitialSync() {
     try {
       let syncResponse = await this.startSync();
+
+      // Add timeout to prevent infinite polling
+      let attempts = 0;
+      const maxAttempts = 30; // 30 seconds timeout
+
       while (!syncResponse.ready) {
+        if (attempts >= maxAttempts) {
+          throw new Error("Initial sync timeout after 30 seconds");
+        }
         await new Promise((resolve) => setTimeout(resolve, 1000));
         syncResponse = await this.startSync();
+        attempts++;
+      }
+
+      if (!syncResponse.syncUpdatedToken) {
+        throw new Error("No sync token received from initial sync");
       }
 
       let storedDeltaToken: string = syncResponse.syncUpdatedToken;
@@ -70,15 +100,11 @@ export class Account {
         deltaToken: storedDeltaToken,
       });
 
-      if (updatedResponse.nextDeltaToken) {
-        // sync has completed
-        storedDeltaToken = updatedResponse.nextDeltaToken;
-      }
-
       let allEmails: EmailMessage[] = updatedResponse.records;
 
-      //fetch all pages if there are more
+      // Move the page fetching loop outside
       while (updatedResponse.nextPageToken) {
+        console.log("fetching next page");
         updatedResponse = await this.getUpdatedEmails({
           pageToken: updatedResponse.nextPageToken,
         });
@@ -86,15 +112,14 @@ export class Account {
         if (updatedResponse.nextDeltaToken) {
           storedDeltaToken = updatedResponse.nextDeltaToken;
         }
-
-        console.log(
-          "initial sync completed, we have synced",
-          allEmails.length,
-          "emails"
-        );
-
-        // store the latest delta token for future incremental syncs
       }
+
+      console.log(
+        "initial sync completed, we have synced",
+        allEmails.length,
+        "emails"
+      );
+
       return {
         emails: allEmails,
         deltaToken: storedDeltaToken,
@@ -102,8 +127,10 @@ export class Account {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Error performing initial sync:", JSON.stringify(error.response?.data, null, 2));
+        throw error; // Re-throw the error to handle it in the calling code
       } else {
         console.error("Error performing initial sync:", error);
+        throw error;
       }
     }
   }
