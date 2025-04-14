@@ -38,6 +38,7 @@ import {
 export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const session = authClient.useSession();
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
@@ -186,7 +187,7 @@ export default function SignUpPage() {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        type={showPassword ? "text" : "password"}
+                        type={showRepeatPassword ? "text" : "password"}
                         placeholder="Enter your password"
                         {...field}
                       />
@@ -198,7 +199,7 @@ export default function SignUpPage() {
                               variant="ghost"
                               size="icon"
                               className="absolute right-0 top-0 h-full px-3"
-                              onClick={() => setShowPassword(!showPassword)}
+                              onClick={() => setShowRepeatPassword(!showRepeatPassword)}
                             >
                               {showPassword ? (
                                 <EyeOff className="h-4 w-4" />
@@ -208,7 +209,7 @@ export default function SignUpPage() {
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
-                            {showPassword ? "Hide password" : "Show password"}
+                            {showRepeatPassword ? "Hide password" : "Show password"}
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
