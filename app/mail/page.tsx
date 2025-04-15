@@ -1,9 +1,7 @@
-import { Mail } from "@/components/mail";
 import { auth } from "@/lib/auth";
-import { accounts, mails } from "@/lib/data";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import React from "react";
+import Mail from "./_components/mail";
 
 export default async function MailPage() {
   const session = await auth.api.getSession({
@@ -19,10 +17,8 @@ export default async function MailPage() {
 
   return (
     <Mail
-      accounts={accounts}
-      mails={mails}
-      defaultLayout={undefined}
-      defaultCollapsed={undefined}
+      defaultLayout={[20, 32, 48]}
+      defaultCollapsed={false}
       navCollapsedSize={4}
     />
   );

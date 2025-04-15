@@ -80,6 +80,7 @@ model EmailAccount {
   emailAddress   String         @unique
   name           String
   nextDeltaToken String?
+  provider       String
   user           User           @relation(fields: [userId], references: [id])
   threads        Thread[]
   emailAddresses EmailAddress[]

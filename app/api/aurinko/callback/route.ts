@@ -31,7 +31,7 @@ export const GET = async (req: NextRequest) => {
   if (!code) {
     return NextResponse.json({ message: "No code provided" }, { status: 400 });
   }
-  
+
   // Add additional scopes parameter to request proper permissions
   const token = await exchangeCodeForAccessToken(code);
   if (!token) {
@@ -56,6 +56,7 @@ export const GET = async (req: NextRequest) => {
       emailAddress: accountDetails.email,
       name: accountDetails.name,
       accessToken: token.accessToken,
+      provider: params.get("serviceType")!
     },
   });
 
