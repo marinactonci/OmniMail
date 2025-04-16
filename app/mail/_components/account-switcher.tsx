@@ -9,20 +9,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // Added Skeleton import
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { MailPlus } from "lucide-react";
-import { getAurinkoAuthUrl } from "@/lib/aurinko";
+} from "@/components/ui/select";
 import { useLocalStorage } from "usehooks-ts";
 import { Mail } from "lucide-react";
+import { AddAccountButton } from "@/components/add-account-button";
 import { SiGmail } from "react-icons/si";
 import { PiMicrosoftOutlookLogo } from "react-icons/pi";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -35,7 +25,6 @@ export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
   const [accountId, setAccountId] = useLocalStorage("accountId", "");
   const [accounts, setAccounts] = useState<any>([]);
   const [mounted, setMounted] = useState(false);
-  const [isAddAccountDialogOpen, setIsAddAccountDialogOpen] = useState(false); // State for dialog
 
   useEffect(() => {
     fetch("/api/account")
@@ -67,14 +56,8 @@ export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
     );
   }
 
-  const onAddAccount = async (provider: "Office365" | "Google") => { // Accept provider
-    const authUrl = await getAurinkoAuthUrl(provider);
-    window.location.href = authUrl;
-    setIsAddAccountDialogOpen(false); // Close dialog on selection
-  };
-
   return (
-    <Dialog open={isAddAccountDialogOpen} onOpenChange={setIsAddAccountDialogOpen}>
+    <>
       <Select value={accountId} onValueChange={setAccountId}>
         <SelectTrigger
           className={cn(
@@ -120,7 +103,6 @@ export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
                   value={account.emailAddress}
                 >
                   <div className="flex items-center gap-3 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground">
-                    {/* Replace the dangerouslySetInnerHTML with provider-based icon */}
                     {(() => {
                       const selected = accounts.find(
                         (account: any) => account.emailAddress === accountId
@@ -136,64 +118,19 @@ export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
                   </div>
                 </SelectItem>
               ))}
-              <div className="mt-2">
-                <DialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-center"
-                  >
-                    <MailPlus className="mr-2 h-4 w-4" /> {/* Added margin */}
-                    Add another email
-                  </Button>
-                </DialogTrigger>
-              </div>
             </>
           ) : (
             <>
               <div className="px-2 py-4 text-center text-sm text-muted-foreground">
                 No linked accounts
               </div>
-              <div>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-center"
-                  >
-                    <MailPlus className="mr-2 h-4 w-4" /> {/* Added margin */}
-                    Add an email account
-                  </Button>
-                </DialogTrigger>
-              </div>
             </>
           )}
+          <div className="mt-1 border-t pt-1">
+            <AddAccountButton asDropdownItem />
+          </div>
         </SelectContent>
       </Select>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Add New Email Account</DialogTitle>
-          <DialogDescription>
-            Choose the type of email account you want to link.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid grid-cols-2 gap-4 py-4">
-          <Button
-            variant="outline"
-            className="h-24 flex-col gap-2" // Make button taller and stack icon/text
-            onClick={() => onAddAccount("Office365")}
-          >
-            <PiMicrosoftOutlookLogo className="h-8 w-8" /> {/* Larger icon */}
-            Outlook
-          </Button>
-          <Button
-            variant="outline"
-            className="h-24 flex-col gap-2" // Make button taller and stack icon/text
-            onClick={() => onAddAccount("Google")}
-          >
-            <SiGmail className="h-8 w-8" /> {/* Larger icon */}
-            Google
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+    </>
   );
 }
