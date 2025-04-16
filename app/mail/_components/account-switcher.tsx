@@ -28,10 +28,6 @@ export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
     fetch("/api/account")
       .then((res) => res.json())
       .then((data) => {
@@ -41,7 +37,8 @@ export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
         }
       })
       .catch((error) => console.error(error));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+      setMounted(true);
   }, []);
 
   if (!mounted) {

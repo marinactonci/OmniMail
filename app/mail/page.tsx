@@ -8,16 +8,13 @@ export default async function MailPage() {
     headers: await headers(),
   });
 
-  // add 4 seconds delay
-  //await new Promise((resolve) => setTimeout(resolve, 4000));
-
   if (!session) {
     redirect("/sign-in");
   }
 
   return (
     <Mail
-      defaultLayout={[20, 32, 48]}
+      defaultLayout={[21, 35, 45]}
       defaultCollapsed={false}
       navCollapsedSize={4}
     />
