@@ -25,7 +25,7 @@ import { z } from "zod";
 import { signUpFormSchema } from "@/schemas/auth";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
-import { Eye, EyeOff, Github, GithubIcon, LoaderCircle } from "lucide-react";
+import { Eye, EyeOff, GithubIcon, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import {
@@ -45,7 +45,8 @@ export default function SignUpPage() {
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       repeatPassword: "",
@@ -53,10 +54,10 @@ export default function SignUpPage() {
   });
 
   async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
-    const { name, email, password } = values;
+    const { firstName, lastName, email, password } = values;
     await authClient.signUp.email(
       {
-        name,
+        name: `${firstName} ${lastName}`,
         email,
         password,
         callbackURL: "/sign-in",
@@ -73,7 +74,7 @@ export default function SignUpPage() {
           toast.success("Successfully signed up.", {
             description: "Please sign in to continue.",
             closeButton: true,
-          })
+          });
           redirect("/sign-in");
         },
         onError: (ctx) => {
@@ -100,19 +101,34 @@ export default function SignUpPage() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="John Doe" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex gap-4">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem className="w-1/2">
+                    <FormLabel>First name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem className="w-1/2">
+                    <FormLabel>Last name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="email"
@@ -217,7 +233,13 @@ export default function SignUpPage() {
               )}
             />
             <Button className="w-full" type="submit">
-              {isLoading ? <LoaderCircle className="animate-spin" /> : isRedirecting ? "Redirecting..." : "Sign up"}
+              {isLoading ? (
+                <LoaderCircle className="animate-spin" />
+              ) : isRedirecting ? (
+                "Redirecting..."
+              ) : (
+                "Sign up"
+              )}
             </Button>
           </form>
         </Form>
@@ -235,7 +257,12 @@ export default function SignUpPage() {
         <div className="flex gap-3">
           <Button variant="outline" className="w-1/2">
             <span className="flex items-center gap-2">
-              <Image src="/google.webp" alt="Google logo" width={20} height={20} />
+              <Image
+                src="/google.webp"
+                alt="Google logo"
+                width={20}
+                height={20}
+              />
               <span>Google</span>
             </span>
           </Button>

@@ -67,11 +67,7 @@ export default function SignInPage() {
           setIsRedirecting(true);
           form.reset();
           form.clearErrors();
-          toast.success("Successfully signed in.", {
-            description: "You are being redirected to your inbox.",
-            closeButton: true,
-          });
-          redirect("/mail");
+          router.push("/mail");
         },
         onError: (ctx) => {
           setIsLoading(false);
