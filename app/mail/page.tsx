@@ -13,10 +13,12 @@ export default async function MailPage() {
   }
 
   return (
-    <Mail
-      defaultLayout={[21, 35, 45]}
-      defaultCollapsed={false}
-      navCollapsedSize={4}
-    />
+    <div className="h-[calc(100vh-64px)]">
+      <Mail
+        defaultLayout={[21, 35, 45]}
+        defaultCollapsed={false}
+        navCollapsedSize={4}
+      />
+    </div>
   );
 }

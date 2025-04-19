@@ -33,7 +33,7 @@ export default function Mail({
         onLayout={(sizes: number[]) => {
           console.log(sizes);
         }}
-        className="items-stretch h-full min-h-screen"
+        className="items-stretch h-full"
       >
         <ResizablePanel
           defaultSize={defaultLayout[0]}

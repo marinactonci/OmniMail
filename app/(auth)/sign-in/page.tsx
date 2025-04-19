@@ -155,7 +155,11 @@ export default function SignInPage() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
+            <Button
+              className="w-full"
+              type="submit"
+              disabled={isLoading || isRedirecting}
+            >
               {isLoading ? (
                 <LoaderCircle className="animate-spin" />
               ) : isRedirecting ? (
