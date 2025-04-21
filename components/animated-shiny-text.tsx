@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
 import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
 
-interface AnimatedShinyTextProps {
+type Props = {
   text: string;
 }
 
-export function AnimatedShinyTextDemo({ text }: AnimatedShinyTextProps) {
+export function AnimatedShinyTextDemo({ text }: Props) {
   return (
     <div
       className={cn(

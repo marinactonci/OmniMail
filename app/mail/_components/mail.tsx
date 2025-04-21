@@ -12,8 +12,9 @@ import { cn } from "@/lib/utils";
 import { Tabs } from "@radix-ui/react-tabs";
 import { useState } from "react";
 import { AccountSwitcher } from "./account-switcher";
+import Sidebar from "./sidebar";
 
-type MailProps = {
+type Props = {
   defaultLayout: number[] | undefined;
   navCollapsedSize: number;
   defaultCollapsed: boolean;
@@ -23,7 +24,7 @@ export default function Mail({
   defaultLayout = [20, 32, 48],
   navCollapsedSize,
   defaultCollapsed,
-}: MailProps) {
+}: Props) {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
 
   return (
@@ -62,7 +63,7 @@ export default function Mail({
               <AccountSwitcher isCollapsed={isCollapsed} />
             </div>
             <Separator />
-            Sidebar
+            <Sidebar isCollapsed={isCollapsed} />
             <div className="flex-1"></div>
             Ask AI
           </div>

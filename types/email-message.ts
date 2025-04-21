@@ -2,7 +2,7 @@ import { EmailAddress } from "./email-address";
 import { EmailAttachment } from "./email-attachment";
 import { EmailHeader } from "./email-header";
 
-export interface EmailMessage {
+export type EmailMessage = {
   id: string;
   threadId: string;
   createdTime: string;

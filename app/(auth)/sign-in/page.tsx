@@ -24,9 +24,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signInFormSchema } from "@/schemas/auth";
 import { authClient } from "@/lib/auth-client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { redirect, useRouter } from "next/navigation";
 import { LoaderCircle, Eye, EyeOff, GithubIcon } from "lucide-react";
 import {
   Tooltip,
@@ -35,6 +34,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Image from "next/image";
+import { AccountSwitcher } from "@/app/mail/_components/account-switcher";
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +48,6 @@ export default function SignInPage() {
       password: "",
     },
   });
-  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof signInFormSchema>) {
     const { email, password } = values;
@@ -67,11 +66,14 @@ export default function SignInPage() {
           setIsRedirecting(true);
           form.reset();
           form.clearErrors();
-          router.push("/mail");
+          toast.success("Signed in successfully", {
+            description: "Redirecting to your inbox...",
+            closeButton: true,
+          });
         },
         onError: (ctx) => {
           setIsLoading(false);
-          toast("Failed to sign in", {
+          toast.error("Failed to sign in", {
             description: ctx.error.message,
             closeButton: true,
           });
@@ -79,12 +81,6 @@ export default function SignInPage() {
       }
     );
   }
-
-  useEffect(() => {
-    if (session.data) {
-      router.push("/mail");
-    }
-  }, [session.data]);
 
   return (
     <Card className="w-full max-w-md mx-auto">

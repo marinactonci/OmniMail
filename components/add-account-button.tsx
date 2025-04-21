@@ -12,13 +12,13 @@ import { Plus } from "lucide-react";
 import { PiMicrosoftOutlookLogo } from "react-icons/pi";
 import { SiGmail } from "react-icons/si";
 
-interface AddAccountButtonProps {
+type Props = {
   asDropdownItem?: boolean;
 }
 
 export function AddAccountButton({
   asDropdownItem = false,
-}: AddAccountButtonProps) {
+}: Props) {
   const handleAddAccount = async (provider: "Google" | "Office365") => {
     const authUrl = await getAurinkoAuthUrl(provider);
     window.location.href = authUrl;

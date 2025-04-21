@@ -17,11 +17,11 @@ import { SiGmail } from "react-icons/si";
 import { PiMicrosoftOutlookLogo } from "react-icons/pi";
 import { Skeleton } from "@/components/ui/skeleton";
 
-interface AccountSwitcherProps {
+type Props = {
   isCollapsed: boolean;
 }
 
-export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
+export function AccountSwitcher({ isCollapsed }: Props) {
   const [accountId, setAccountId] = useLocalStorage("accountId", "");
   const [accounts, setAccounts] = useState<any>([]);
   const [mounted, setMounted] = useState(false);
@@ -32,7 +32,7 @@ export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
       .then((data) => {
         setAccounts(data.data || []);
         if (!accountId && data.data && data.data.length > 0) {
-          setAccountId(data.data[0].email);
+          setAccountId(data.data[0].id);
         }
       })
       .catch((error) => console.error(error));
@@ -72,7 +72,7 @@ export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
               <>
                 {(() => {
                   const selected = accounts.find(
-                    (account: any) => account.emailAddress === accountId
+                    (account: any) => account.id === accountId
                   );
                   if (!selected) return <Mail className="h-4 w-4" />;
                   if (selected.provider === "Office365")
@@ -84,7 +84,7 @@ export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
                 <span className={cn("ml-2", isCollapsed && "hidden")}>
                   {
                     accounts.find(
-                      (account: any) => account.emailAddress === accountId
+                      (account: any) => account.id === accountId
                     )?.emailAddress
                   }
                 </span>
@@ -100,12 +100,12 @@ export function AccountSwitcher({ isCollapsed }: AccountSwitcherProps) {
               {accounts.map((account: any) => (
                 <SelectItem
                   key={account.emailAddress}
-                  value={account.emailAddress}
+                  value={account.id}
                 >
                   <div className="flex items-center gap-3 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground">
                     {(() => {
                       const selected = accounts.find(
-                        (account: any) => account.emailAddress === accountId
+                        (account: any) => account.id === accountId
                       );
                       if (!selected) return <Mail className="h-4 w-4" />;
                       if (selected.provider === "Office365")

@@ -1,17 +1,17 @@
+"use client";
+
 import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { authClient } from "@/lib/auth-client";
+import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
-import Mail from "./_components/mail";
+import { useEffect } from "react";
+//import Mail from "./_components/mail";
 
-export default async function MailPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+const Mail = dynamic(() => import("./_components/mail"), {
+  ssr: false,
+});
 
-  if (!session) {
-    redirect("/sign-in");
-  }
-
+export default function MailPage() {
   return (
     <div className="h-[calc(100vh-64px)]">
       <Mail

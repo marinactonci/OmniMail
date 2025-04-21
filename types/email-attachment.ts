@@ -1,4 +1,4 @@
-export interface EmailAttachment {
+export type EmailAttachment = {
   id: string;
   name: string;
   mimeType: string;

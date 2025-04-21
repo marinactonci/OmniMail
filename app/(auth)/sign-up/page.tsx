@@ -41,7 +41,6 @@ export default function SignUpPage() {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
-  const session = authClient.useSession();
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -79,17 +78,13 @@ export default function SignUpPage() {
         },
         onError: (ctx) => {
           setIsLoading(false);
-          toast("Failed to sign up", {
+          toast.error("Failed to sign up", {
             description: ctx.error.message,
             closeButton: true,
           });
         },
       }
     );
-  }
-
-  if (session.data) {
-    redirect("/mail");
   }
 
   return (
