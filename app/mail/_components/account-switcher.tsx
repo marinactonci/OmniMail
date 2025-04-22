@@ -16,45 +16,15 @@ import { AddAccountButton } from "@/components/add-account-button";
 import { SiGmail } from "react-icons/si";
 import { PiMicrosoftOutlookLogo } from "react-icons/pi";
 import { Skeleton } from "@/components/ui/skeleton";
+import { trpc } from "@/server/client";
 
 type Props = {
   isCollapsed: boolean;
 }
 
 export function AccountSwitcher({ isCollapsed }: Props) {
+  const { data: accounts } = trpc.account.getAccounts.useQuery()
   const [accountId, setAccountId] = useLocalStorage("accountId", "");
-  const [accounts, setAccounts] = useState<any>([]);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/accounts")
-      .then((res) => res.json())
-      .then((data) => {
-        setAccounts(data.data || []);
-        if (!accountId && data.data && data.data.length > 0) {
-          setAccountId(data.data[0].id);
-        }
-      })
-      .catch((error) => console.error(error));
-
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <div
-        className={cn(
-          "flex w-full items-center gap-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0",
-          "border border-input bg-background h-10 px-3 py-2 text-sm ring-offset-background rounded-md", // Mimic SelectTrigger appearance
-          isCollapsed &&
-            "flex h-9 w-9 shrink-0 items-center justify-center p-0 [&>span]:w-auto [&>svg]:hidden"
-        )}
-      >
-        <Skeleton className="h-4 w-4 shrink-0 rounded-full" />
-        <Skeleton className={cn("ml-2 h-4 w-3/4", isCollapsed && "hidden")} />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -68,7 +38,7 @@ export function AccountSwitcher({ isCollapsed }: Props) {
           aria-label="Select account"
         >
           <SelectValue placeholder="Select an account">
-            {accounts.length > 0 ? (
+            {accounts && accounts.length > 0 ? (
               <>
                 {(() => {
                   const selected = accounts.find(
@@ -95,7 +65,7 @@ export function AccountSwitcher({ isCollapsed }: Props) {
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          {accounts.length > 0 ? (
+          {accounts && accounts.length > 0 ? (
             <>
               {accounts.map((account: any) => (
                 <SelectItem
