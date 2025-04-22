@@ -27,7 +27,7 @@ export function AccountSwitcher({ isCollapsed }: Props) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    fetch("/api/account")
+    fetch("/api/accounts")
       .then((res) => res.json())
       .then((data) => {
         setAccounts(data.data || []);
