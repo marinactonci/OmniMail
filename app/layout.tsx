@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/navbar";
+import Provider from "@/components/provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,11 +14,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-})
+});
 
 export const metadata: Metadata = {
   title: "OmniMail",
-  description: "OmniMail enhances your email experience with AI-powered text generation, smart autocomplete, and a chatbot that answers questions about your inbox.",
+  description:
+    "OmniMail enhances your email experience with AI-powered text generation, smart autocomplete, and a chatbot that answers questions about your inbox.",
 };
 
 export default function RootLayout({
@@ -38,7 +40,7 @@ export default function RootLayout({
         >
           <main>
             <Navbar />
-            {children}
+            <Provider>{children}</Provider>
           </main>
           <Toaster />
         </ThemeProvider>
