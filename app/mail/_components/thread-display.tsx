@@ -1,8 +1,8 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import UseThreads from "@/hooks/use-threads";
-import { Archive, ArchiveX, Clock, MoreVertical, Trash2 } from "lucide-react";
-import React from "react";
+import { Archive, ArchiveX, Clock, MoreVertical, Send, Trash2 } from "lucide-react";
+import React, { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,29 +13,67 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import EmailDisplay from "./email-display";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function ThreadDisplay() {
   const { threadId, threads } = UseThreads();
   const thread = threads?.find((t) => t.id === threadId);
+  const [replyContent, setReplyContent] = useState("");
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center p-2">
         <div className="flex items-center gap-2">
-          <Button variant={"ghost"} size={"icon"} disabled={!thread}>
-            <Archive className="size-4" />
-          </Button>
-          <Button variant={"ghost"} size={"icon"} disabled={!thread}>
-            <ArchiveX className="size-4" />
-          </Button>
-          <Button variant={"ghost"} size={"icon"} disabled={!thread}>
-            <Trash2 className="size-4" />
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant={"ghost"} size={"icon"} disabled={!thread}>
+                  <Archive className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Archive</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant={"ghost"} size={"icon"} disabled={!thread}>
+                  <ArchiveX className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Move to junk</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant={"ghost"} size={"icon"} disabled={!thread}>
+                  <Trash2 className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Move to trash</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
         <Separator orientation="vertical" className="mx-2" />
-        <Button variant={"ghost"} size={"icon"} disabled={!thread}>
-          <Clock className="size-4" />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant={"ghost"} size={"icon"} disabled={!thread}>
+                <Clock className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Snooze</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <div className="flex items-center gap-2 ml-auto">
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -57,7 +95,7 @@ export default function ThreadDisplay() {
       <Separator />
       {thread ? (
         <>
-          <div className="flex flex-col flex-1 overflow-scroll">
+          <div className="flex flex-col flex-1 overflow-hidden">
             <div className="flex items-center p-4">
               <div className="flex items-center gap-4 text-sm">
                 <Avatar>
@@ -89,15 +127,29 @@ export default function ThreadDisplay() {
               )}
             </div>
             <Separator />
-            <div className="max-h-[calc(100vh-450px)] overflow-scroll flex flex-col">
-              <div className="p-6 flex flex-col-gap-4">
+            <div className="flex-1 overflow-auto">
+              <div className="p-4 flex flex-col gap-4">
                 {thread.emails.map((email) => {
                   return <EmailDisplay key={email.id} email={email} />;
                 })}
               </div>
             </div>
             <Separator />
-            {/* Reply box */}
+            <div className="p-4">
+              <Textarea
+                placeholder="Write your reply..."
+                value={replyContent}
+                rows={5}
+                onChange={(e) => setReplyContent(e.target.value)}
+                className="mb-2"
+              />
+              <div className="flex justify-end">
+                <Button disabled={!replyContent.trim()}>
+                  <Send className="size-4" />
+                  Send
+                </Button>
+              </div>
+            </div>
           </div>
         </>
       ) : (

@@ -61,7 +61,7 @@ export const threadRouter = router({
             },
           },
         },
-        take: 15,
+        //take: 15,
         orderBy: {
           lastMessageDate: "desc",
         },
