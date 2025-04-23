@@ -1,11 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import UseThreads from "@/hooks/use-threads";
 import { cn } from "@/lib/utils";
+import { RouterOutputs } from "@/server/client";
 import { formatDistanceToNow } from "date-fns";
 import React, { ComponentProps } from "react";
 
 type Props = {
-  thread: any;
+  thread: RouterOutputs["thread"]["getAllThreads"][0];
 };
 
 export default function ThreadItem({ thread }: Props) {

@@ -12,7 +12,7 @@ export default function UseThreads() {
     data: threads,
     isFetching,
     refetch,
-  } = trpc.account.getThreads.useQuery(
+  } = trpc.thread.getAllThreads.useQuery(
     {
       accountId,
       tab,

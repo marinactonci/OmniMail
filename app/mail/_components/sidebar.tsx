@@ -14,15 +14,15 @@ function Sidebar({ isCollapsed }: Props) {
   const [accountId] = useLocalStorage("accountId", "");
   const [tab] = useLocalStorage<"inbox" | "draft" | "sent">("tab", "inbox");
 
-  const { data: inboxThreads } = trpc.account.getNumThreads.useQuery({
+  const { data: inboxThreads } = trpc.thread.getNumThreads.useQuery({
     accountId,
     tab: "inbox",
   });
-  const { data: draftThreads } = trpc.account.getNumThreads.useQuery({
+  const { data: draftThreads } = trpc.thread.getNumThreads.useQuery({
     accountId,
     tab: "draft",
   });
-  const { data: sentThreads } = trpc.account.getNumThreads.useQuery({
+  const { data: sentThreads } = trpc.thread.getNumThreads.useQuery({
     accountId,
     tab: "sent",
   });

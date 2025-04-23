@@ -14,6 +14,7 @@ import { useState } from "react";
 import { AccountSwitcher } from "./account-switcher";
 import Sidebar from "./sidebar";
 import ThreadList from "./thread-list";
+import ThreadDisplay from "./thread-display";
 
 type Props = {
   defaultLayout: number[] | undefined;
@@ -81,7 +82,12 @@ export default function Mail({
                 >
                   Inbox
                 </TabsTrigger>
-                <TabsTrigger value="done">Done</TabsTrigger>
+                <TabsTrigger
+                  value="done"
+                  className="text-zinc-600 dark:text-zinc-200"
+                >
+                  Done
+                </TabsTrigger>
               </TabsList>
             </div>
             <Separator />
@@ -96,7 +102,7 @@ export default function Mail({
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[2]} minSize={30}>
-          Thread Display
+          <ThreadDisplay />
         </ResizablePanel>
       </ResizablePanelGroup>
     </TooltipProvider>
