@@ -3,10 +3,37 @@ import { format } from "date-fns";
 import ThreadItem from "./thread-item";
 import React from "react";
 
-export default function ThreadList() {
+interface Props {
+  searchQuery?: string;
+}
+
+export default function ThreadList({ searchQuery = "" }: Props) {
   const { threads } = UseThreads();
 
-  const groupedThreads = threads?.reduce((acc, thread) => {
+  const filteredThreads = threads?.filter((thread) => {
+    if (!searchQuery) return true;
+
+    const searchLower = searchQuery.toLowerCase();
+
+    // Search in subject
+    if (thread.subject?.toLowerCase().includes(searchLower)) return true;
+
+    // Search in email body & body snippets
+    if (thread.emails.some(email =>
+      email.bodySnippet?.toLowerCase().includes(searchLower) ||
+      email.body?.toLowerCase().includes(searchLower)
+    )) return true;
+
+    // Search in sender names and email addresses
+    if (thread.emails.some(email =>
+      email.from?.name?.toLowerCase().includes(searchLower) ||
+      email.from?.address?.toLowerCase().includes(searchLower)
+    )) return true;
+
+    return false;
+  });
+
+  const groupedThreads = filteredThreads?.reduce((acc, thread) => {
     const date = format(
       thread.emails[0]?.sentAt ?? new Date(),
       "MMMM dd, yyyy"
@@ -16,10 +43,10 @@ export default function ThreadList() {
     }
     acc[date].push(thread);
     return acc;
-  }, {} as Record<string, typeof threads>);
+  }, {} as Record<string, typeof filteredThreads>);
 
   return (
-    <div className="max-w-full overflow-y-scroll h-[calc(100vh-52px-100px)]">
+    <div className="max-w-full overflow-y-scroll h-[calc(100vh-52px-125px)]">
       <div className="flex flex-col gap-2 p-4 pt-0">
         {Object.entries(groupedThreads ?? {}).map(([date, threads]) => {
           return (

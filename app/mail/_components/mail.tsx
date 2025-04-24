@@ -1,5 +1,6 @@
 "use client";
 
+import { Search, X } from "lucide-react";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -28,6 +29,11 @@ export default function Mail({
   defaultCollapsed,
 }: Props) {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -91,12 +97,31 @@ export default function Mail({
               </TabsList>
             </div>
             <Separator />
-            Search Bar
+            <div className="relative px-4 py-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Search emails..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  className="h-10 w-full rounded-md border border-input bg-background pl-10 pr-10 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            </div>
             <TabsContent value="inbox">
-              <ThreadList />
+              <ThreadList searchQuery={searchQuery} />
             </TabsContent>
             <TabsContent value="done">
-              <ThreadList />
+              <ThreadList searchQuery={searchQuery} />
             </TabsContent>
           </Tabs>
         </ResizablePanel>
