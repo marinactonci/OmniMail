@@ -113,7 +113,7 @@ export default function EmailEditor({}: Props) {
           }`}
         >
           <div className="space-y-4">
-          <MultiSelect options={frameworks} />
+          <MultiSelect options={frameworks} label="To" />
           <MultiSelect options={frameworks} />
           <MultiSelect options={frameworks} />
           </div>

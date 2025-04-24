@@ -24,9 +24,10 @@ type Props = {
     label: string;
     value: string;
   }[];
+  label?: string;
 };
 
-export function MultiSelect({ options }: Props) {
+export function MultiSelect({ options, label }: Props) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState<string[]>([]);
 
@@ -48,7 +49,10 @@ export function MultiSelect({ options }: Props) {
           aria-expanded={open}
           className="w-full justify-between"
         >
-          <div className="flex gap-2 justify-start">
+          <div className="flex gap-2 items-center justify-start flex-1">
+            {label && (
+              <span className="text-sm text-muted-foreground mr-2">{label}</span>
+            )}
             {value?.length
               ? value.map((val, i) => (
                   <div
