@@ -26,7 +26,7 @@ export default function EmailDisplay({ email }: Props) {
     <Card
       className={cn(
         "mb-4 overflow-hidden border",
-        isMe ? "bg-primary/5" : "bg-card"
+        isMe ? "bg-accent" : "bg-card"
       )}
     >
       <CardHeader className="flex flex-row items-center gap-4 p-4">

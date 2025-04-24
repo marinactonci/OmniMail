@@ -30,7 +30,7 @@ export default function ThreadItem({ thread }: Props) {
       }}
       className={cn(
         "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all relative hover:cursor-pointer hover:bg-accent",
-        thread.id === threadId && "bg-accent"
+        thread.id === threadId && "bg-accent border-black"
       )}
     >
       <div className="flex flex-col w-full gap-2">

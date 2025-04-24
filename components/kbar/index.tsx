@@ -9,8 +9,13 @@ import {
   KBarSearch,
 } from "kbar";
 import RenderResults from "./render-results";
+import { useLocalStorage } from "usehooks-ts";
+import useThemeSwitching from "./use-theme-switching";
+import useAccountSwitching from "./use-account-switching";
 
 export default function Kbar({ children }: { children: React.ReactNode }) {
+  const [_, setTab] = useLocalStorage("tab", "");
+
   const actions: Action[] = [
     {
       id: "inboxAction",
@@ -19,7 +24,27 @@ export default function Kbar({ children }: { children: React.ReactNode }) {
       section: "Navigation",
       subtitle: "View your inbox",
       perform: () => {
-        console.log("Inbox");
+        setTab("inbox");
+      },
+    },
+    {
+      id: "draftAction",
+      name: "Draft",
+      shortcut: ["g", "d"],
+      section: "Navigation",
+      subtitle: "View your drafts",
+      perform: () => {
+        setTab("draft");
+      },
+    },
+    {
+      id: "sentAction",
+      name: "Sent",
+      shortcut: ["g", "s"],
+      section: "Navigation",
+      subtitle: "View your sent items",
+      perform: () => {
+        setTab("sent");
       },
     },
   ];
@@ -32,6 +57,9 @@ export default function Kbar({ children }: { children: React.ReactNode }) {
 }
 
 const ActualComponent = ({ children }: { children: React.ReactNode }) => {
+  useAccountSwitching();
+  useThemeSwitching();
+
   return (
     <>
       <KBarPortal>

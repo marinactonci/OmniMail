@@ -16,6 +16,7 @@ import { AccountSwitcher } from "./account-switcher";
 import Sidebar from "./sidebar";
 import ThreadList from "./thread-list";
 import ThreadDisplay from "./thread-display";
+import { useLocalStorage } from "usehooks-ts";
 
 type Props = {
   defaultLayout: number[] | undefined;
@@ -29,6 +30,7 @@ export default function Mail({
   defaultCollapsed,
 }: Props) {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+  const [_, setDone] = useLocalStorage("done", false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,12 +87,18 @@ export default function Mail({
                 <TabsTrigger
                   value="inbox"
                   className="text-zinc-600 dark:text-zinc-200"
+                  onClick={() => {
+                    setDone(false);
+                  }}
                 >
                   Inbox
                 </TabsTrigger>
                 <TabsTrigger
                   value="done"
                   className="text-zinc-600 dark:text-zinc-200"
+                  onClick={() => {
+                    setDone(true);
+                  }}
                 >
                   Done
                 </TabsTrigger>
