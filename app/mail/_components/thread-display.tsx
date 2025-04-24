@@ -1,7 +1,14 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import UseThreads from "@/hooks/use-threads";
-import { Archive, ArchiveX, Clock, MoreVertical, Send, Trash2 } from "lucide-react";
+import {
+  Archive,
+  ArchiveX,
+  Clock,
+  MoreVertical,
+  Send,
+  Trash2,
+} from "lucide-react";
 import React, { useState } from "react";
 import {
   DropdownMenu,
@@ -20,6 +27,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ReplyBox from "./reply-box";
 
 export default function ThreadDisplay() {
   const { threadId, threads } = UseThreads();
@@ -136,19 +144,7 @@ export default function ThreadDisplay() {
             </div>
             <Separator />
             <div className="p-4">
-              <Textarea
-                placeholder="Write your reply..."
-                value={replyContent}
-                rows={5}
-                onChange={(e) => setReplyContent(e.target.value)}
-                className="mb-2"
-              />
-              <div className="flex justify-end">
-                <Button disabled={!replyContent.trim()}>
-                  <Send className="size-4" />
-                  Send
-                </Button>
-              </div>
+              <ReplyBox />
             </div>
           </div>
         </>
