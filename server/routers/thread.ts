@@ -58,6 +58,17 @@ export const threadRouter = router({
               subject: true,
               sysLabels: true,
               sentAt: true,
+              attachments: {
+                select: {
+                  id: true,
+                  name: true,
+                  mimeType: true,
+                  size: true,
+                  inline: true,
+                  contentId: true,
+                  contentLocation: true
+                }
+              }
             },
           },
         },
