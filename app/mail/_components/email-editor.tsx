@@ -24,6 +24,9 @@ export default function EmailEditor({}: Props) {
   const [expended, setExpended] = useState(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const { threadId, threads } = UseThreads();
+  const [isEditorReady, setIsEditorReady] = useState(false);
+
+  const currentThread = useMemo(() => threads?.find((t) => t.id === threadId), [threadId, threads]);
 
   const frameworks = [
     {
@@ -56,45 +59,29 @@ export default function EmailEditor({}: Props) {
   const modKey = isMac ? "⌘" : "Ctrl";
 
   const handleAiAutoComplete = async () => {
-    if (!editor) return;
-
-    const currentThread = threads?.find((t) => t.id === threadId);
-    if (!currentThread) return;
-
-    // Get latest non-user email for context
-    const latestEmail = currentThread.emails
-      .filter(
-        (email) => email.from.address !== currentThread.emails[0]?.from.address
-      )
-      .at(-1);
-
-    if (!latestEmail?.body) return;
+    console.log("handleAiAutoComplete called");
+    if (!editor) {
+      console.log("No editor instance");
+      return;
+    }
 
     const { state } = editor;
     const currentPosition = state.selection.$head.pos;
     const currentContent = editor.getText().slice(0, currentPosition);
+    console.log("Current content:", currentContent);
 
     try {
+      console.log("Getting AI completion...");
       const completion = await getEmailCompletion(
         currentContent,
-        latestEmail.body
+        currentThread?.emails?.at(-1)?.body || "" // Now currentThread is defined
       );
-      setValue(completion);
+      console.log("Got completion:", completion);
+      editor.commands.insertContent(completion);
     } catch (error) {
       console.error("Error getting AI completion:", error);
     }
   };
-
-  const CustomText = Text.extend({
-    addKeyboardShortcuts() {
-      return {
-        "Meta-j": () => {
-          handleAiAutoComplete();
-          return true;
-        },
-      };
-    },
-  });
 
   const editor = useEditor({
     extensions: [
@@ -103,7 +90,7 @@ export default function EmailEditor({}: Props) {
         orderedList: false,
         blockquote: false,
       }),
-      CustomText,
+      Text,
       BulletList.configure({
         keepMarks: true,
         HTMLAttributes: {
@@ -130,6 +117,19 @@ export default function EmailEditor({}: Props) {
     onUpdate: ({ editor }) => {
       setValue(editor.getHTML());
     },
+    onCreate: ({ editor }) => {
+      setIsEditorReady(true);
+    },
+    editorProps: {
+      handleKeyDown: (view, event) => {
+        if ((event.metaKey || event.ctrlKey) && event.key === 'j') {
+          event.preventDefault();
+          handleAiAutoComplete();
+          return true;
+        }
+        return false;
+      }
+    }
   });
 
   const send = () => {
@@ -192,7 +192,7 @@ export default function EmailEditor({}: Props) {
           </kbd>{" "}
           for AI autocomplete.
         </span>
-        <Button disabled={!value} onClick={() => send()}>
+        <Button disabled={!editor || editor.isEmpty} onClick={() => send()}>
           <Send className="mr-2 h-4 w-4" />
           Send
         </Button>
