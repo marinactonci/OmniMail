@@ -13,12 +13,17 @@ import { Button } from "@/components/ui/button";
 import { BotMessageSquare, File, Send } from "lucide-react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Input } from "@/components/ui/input";
+import { getEmailCompletion } from "@/lib/ai";
+import UseThreads from "@/hooks/use-threads";
+import AiPromptModal from "./ai-prompt-modal";
 
 type Props = {};
 
 export default function EmailEditor({}: Props) {
   const [value, setValue] = useState("");
   const [expended, setExpended] = useState(false);
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const { threadId, threads } = UseThreads();
 
   const frameworks = [
     {
@@ -50,18 +55,48 @@ export default function EmailEditor({}: Props) {
 
   const modKey = isMac ? "⌘" : "Ctrl";
 
+  const handleAiAutoComplete = async () => {
+    if (!editor) return;
+
+    const currentThread = threads?.find((t) => t.id === threadId);
+    if (!currentThread) return;
+
+    // Get latest non-user email for context
+    const latestEmail = currentThread.emails
+      .filter(
+        (email) => email.from.address !== currentThread.emails[0]?.from.address
+      )
+      .at(-1);
+
+    if (!latestEmail?.body) return;
+
+    const { state } = editor;
+    const currentPosition = state.selection.$head.pos;
+    const currentContent = editor.getText().slice(0, currentPosition);
+
+    try {
+      const completion = await getEmailCompletion(
+        currentContent,
+        latestEmail.body
+      );
+      setValue(completion);
+    } catch (error) {
+      console.error("Error getting AI completion:", error);
+    }
+  };
+
   const CustomText = Text.extend({
     addKeyboardShortcuts() {
       return {
         "Meta-j": () => {
-          console.log("Meta-j pressed");
+          handleAiAutoComplete();
           return true;
         },
       };
     },
   });
+
   const editor = useEditor({
-    autofocus: false,
     extensions: [
       StarterKit.configure({
         bulletList: false,
@@ -101,6 +136,12 @@ export default function EmailEditor({}: Props) {
     console.log("Editor value: ", value);
   };
 
+  const handleAiComplete = (content: string) => {
+    if (editor) {
+      editor.commands.setContent(content);
+    }
+  };
+
   return (
     <div>
       <EditorOptions editor={editor} />
@@ -130,13 +171,17 @@ export default function EmailEditor({}: Props) {
             <span className="font-medium text-green-600">Draft </span>
             to Tonči
           </Button>
-          <Button variant={"outline"} size="icon">
+          <Button
+            variant={"outline"}
+            size="icon"
+            onClick={() => setIsAiModalOpen(true)}
+          >
             <BotMessageSquare className="size-4" />
           </Button>
         </div>
       </div>
-      <div className="prose dark:prose-invert w-full">
-        <EditorContent editor={editor} value={value} />
+      <div className="prose dark:prose-invert w-full max-h-[200px] overflow-y-scroll">
+        <EditorContent editor={editor} />
       </div>
       <Separator />
       <div className="py-3 px-4 flex items-center justify-between">
@@ -148,10 +193,15 @@ export default function EmailEditor({}: Props) {
           for AI autocomplete.
         </span>
         <Button disabled={!value} onClick={() => send()}>
-          <Send />
+          <Send className="mr-2 h-4 w-4" />
           Send
         </Button>
       </div>
+      <AiPromptModal
+        isOpen={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
+        onComplete={handleAiComplete}
+      />
     </div>
   );
 }

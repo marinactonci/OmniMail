@@ -9,7 +9,6 @@ import {
   MoreVertical,
   Reply,
   ReplyAll,
-  Send,
   Trash2,
 } from "lucide-react";
 import React, { useState, useMemo } from "react";
@@ -23,7 +22,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import EmailDisplay from "./email-display";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
