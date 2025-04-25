@@ -8,10 +8,10 @@ interface Props {
 }
 
 export default function ThreadList({ searchQuery = "" }: Props) {
-  const { threads, setThreadId } = UseThreads();
+  const { threads, setThreadId, threadId } = UseThreads();
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const threadsRef = useRef<HTMLDivElement>(null);
-  const lastSelectedId = useRef<string | null>(null);
+  const isInitialMount = useRef(true);
 
   const filteredThreads = threads?.filter((thread) => {
     if (!searchQuery) return true;
@@ -30,29 +30,33 @@ export default function ThreadList({ searchQuery = "" }: Props) {
 
   const flatThreads = Object.values(filteredThreads ?? {}).flat();
 
-  // Effect to handle thread selection after focus index changes
+  // Only update focusedIndex when threads or threadId changes
   useEffect(() => {
-    if (focusedIndex >= 0 && focusedIndex < flatThreads.length) {
-      const thread = flatThreads[focusedIndex];
-      if (thread && thread.id !== lastSelectedId.current) {
-        lastSelectedId.current = thread.id;
-        setThreadId(thread.id);
-        const threadElements = threadsRef.current?.querySelectorAll('button');
-        threadElements?.[focusedIndex]?.scrollIntoView({ block: 'nearest' });
-      }
-    }
-  }, [focusedIndex, flatThreads, setThreadId]);
+    if (!flatThreads.length) return;
 
+    const currentIndex = threadId ? flatThreads.findIndex(thread => thread.id === threadId) : -1;
+    setFocusedIndex(currentIndex !== -1 ? currentIndex : 0);
+  }, [flatThreads, threadId]);
+
+  // Handle keyboard navigation
   const handleThreadNavigation = useCallback((direction: 'up' | 'down') => {
     if (!flatThreads.length) return;
 
-    setFocusedIndex(prev => {
-      const newIndex = direction === 'down'
-        ? Math.min(prev + 1, flatThreads.length - 1)
-        : Math.max(prev - 1, 0);
-      return newIndex;
-    });
-  }, [flatThreads]);
+    const newIndex = direction === 'down'
+      ? Math.min(focusedIndex + 1, flatThreads.length - 1)
+      : Math.max(focusedIndex - 1, 0);
+
+    setFocusedIndex(newIndex);
+    setThreadId(flatThreads[newIndex].id);
+  }, [flatThreads, focusedIndex, setThreadId]);
+
+  // First thread selection on mount
+  useEffect(() => {
+    if (isInitialMount.current && flatThreads.length && !threadId) {
+      setThreadId(flatThreads[0].id);
+      isInitialMount.current = false;
+    }
+  }, [flatThreads, threadId, setThreadId]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -71,7 +75,6 @@ export default function ThreadList({ searchQuery = "" }: Props) {
   // Reset focused index when search query changes
   useEffect(() => {
     setFocusedIndex(-1);
-    lastSelectedId.current = null;
   }, [searchQuery]);
 
   const groupedThreads = filteredThreads?.reduce((acc, thread) => {
