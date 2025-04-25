@@ -38,7 +38,16 @@ export default function ThreadList({ searchQuery = "" }: Props) {
     setFocusedIndex(currentIndex !== -1 ? currentIndex : 0);
   }, [flatThreads, threadId]);
 
-  // Handle keyboard navigation
+  // First thread selection on mount
+  useEffect(() => {
+    if (isInitialMount.current && flatThreads.length && !threadId) {
+      setThreadId(flatThreads[0].id);
+      isInitialMount.current = false;
+    }
+  }, [flatThreads, threadId, setThreadId]);
+
+  // Keyboard navigation code preserved for future reference
+  /*
   const handleThreadNavigation = useCallback((direction: 'up' | 'down') => {
     if (!flatThreads.length) return;
 
@@ -49,14 +58,6 @@ export default function ThreadList({ searchQuery = "" }: Props) {
     setFocusedIndex(newIndex);
     setThreadId(flatThreads[newIndex].id);
   }, [flatThreads, focusedIndex, setThreadId]);
-
-  // First thread selection on mount
-  useEffect(() => {
-    if (isInitialMount.current && flatThreads.length && !threadId) {
-      setThreadId(flatThreads[0].id);
-      isInitialMount.current = false;
-    }
-  }, [flatThreads, threadId, setThreadId]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -71,6 +72,7 @@ export default function ThreadList({ searchQuery = "" }: Props) {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleThreadNavigation]);
+  */
 
   // Reset focused index when search query changes
   useEffect(() => {
