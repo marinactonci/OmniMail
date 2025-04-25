@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { BotMessageSquare, File, Send } from "lucide-react";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { Input } from "@/components/ui/input";
 
 type Props = {};
 
@@ -104,29 +105,29 @@ export default function EmailEditor({}: Props) {
     <div>
       <EditorOptions editor={editor} />
       <Separator />
-      <div className="py-4 space-y-2">
+      <div className="py-4 space-y-4">
         <div
-          className={`transition-all duration-200 ease-in-out ${
+          className={`transition-all duration-700 ease-in-out ${
             expended
               ? "opacity-100 max-h-60"
               : "opacity-0 max-h-0 overflow-hidden"
           }`}
         >
           <div className="space-y-4">
-          <MultiSelect options={frameworks} label="To" />
-          <MultiSelect options={frameworks} />
-          <MultiSelect options={frameworks} />
+            <MultiSelect options={frameworks} label="To" />
+            <MultiSelect options={frameworks} label="Cc" />
+            <Input type="text" placeholder="Subject" />
           </div>
           <Separator className="mt-4" />
         </div>
         <div className="flex items-center gap-4">
           <Button
-            variant={"ghost"}
+            variant={"outline"}
             className="cursor-pointer gap-1"
             onClick={() => setExpended(!expended)}
           >
-            <File className="size-4" />
-            <span className="font-medium">Draft </span>
+            <File className="size-4 text-green-600" />
+            <span className="font-medium text-green-600">Draft </span>
             to Tonči
           </Button>
           <Button variant={"outline"} size="icon">

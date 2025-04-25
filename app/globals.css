@@ -123,7 +123,7 @@
 
 .tiptap.ProseMirror {
   outline: none;
-  min-height: 50px !important;
+  min-height: 100px !important;
 }
 
 .is-editor-empty:first-child::before {

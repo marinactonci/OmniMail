@@ -11,12 +11,13 @@ import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { Tabs } from "@radix-ui/react-tabs";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AccountSwitcher } from "./account-switcher";
 import Sidebar from "./sidebar";
 import ThreadList from "./thread-list";
 import ThreadDisplay from "./thread-display";
 import { useLocalStorage } from "usehooks-ts";
+import { Input } from "@/components/ui/input";
 
 type Props = {
   defaultLayout: number[] | undefined;
@@ -32,6 +33,19 @@ export default function Mail({
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const [_, setDone] = useLocalStorage("done", false);
   const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "/" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+    return () => document.removeEventListener("keydown", handleKeyPress);
+  }, []);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -108,12 +122,13 @@ export default function Mail({
             <div className="relative px-4 py-2">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <input
+                <Input
+                  ref={searchInputRef}
                   type="text"
-                  placeholder="Search emails..."
+                  placeholder="Search emails... (Press '/' to focus)"
                   value={searchQuery}
                   onChange={handleSearch}
-                  className="h-10 w-full rounded-md border border-input bg-background pl-10 pr-10 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="h-10 w-full px-10 text-sm"
                 />
                 {searchQuery && (
                   <button

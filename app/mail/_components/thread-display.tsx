@@ -5,11 +5,14 @@ import {
   Archive,
   ArchiveX,
   Clock,
+  Forward,
   MoreVertical,
+  Reply,
+  ReplyAll,
   Send,
   Trash2,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,8 +34,18 @@ import ReplyBox from "./reply-box";
 
 export default function ThreadDisplay() {
   const { threadId, threads } = UseThreads();
-  const thread = threads?.find((t) => t.id === threadId);
+  const thread = useMemo(() => threads?.find((t) => t.id === threadId), [threadId, threads]);
   const [replyContent, setReplyContent] = useState("");
+
+  // Memoize the email displays to prevent unnecessary re-renders
+  const emailDisplays = useMemo(() => {
+    if (!thread) return null;
+    return thread.emails.map((email) => (
+      <EmailDisplay key={email.id} email={email} />
+    ));
+  }, [thread]);
+
+  const memoizedReplyBox = useMemo(() => <ReplyBox />, []);
 
   return (
     <div className="flex flex-col h-full">
@@ -83,22 +96,51 @@ export default function ThreadDisplay() {
           </Tooltip>
         </TooltipProvider>
         <div className="flex items-center gap-2 ml-auto">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <div
-                className={buttonVariants({ variant: "ghost", size: "icon" })}
-              >
-                <MoreVertical className="!size-4" />
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Mark as unread</DropdownMenuLabel>
-              <DropdownMenuItem>Star thread</DropdownMenuItem>
-              <DropdownMenuItem>Add label</DropdownMenuItem>
-              <DropdownMenuItem>Mute thread</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant={"ghost"} size={"icon"} disabled={!thread}>
+                  <Reply className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Reply</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant={"ghost"} size={"icon"} disabled={!thread}>
+                  <ReplyAll className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Reply All</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant={"ghost"} size={"icon"} disabled={!thread}>
+                  <Forward className="size-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Forward</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
+        <Separator orientation="vertical" className="mx-2" />
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <div className={buttonVariants({ variant: "ghost", size: "icon" })}>
+              <MoreVertical className="!size-4" />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Mark as unread</DropdownMenuLabel>
+            <DropdownMenuItem>Star thread</DropdownMenuItem>
+            <DropdownMenuItem>Add label</DropdownMenuItem>
+            <DropdownMenuItem>Mute thread</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <Separator />
       {thread ? (
@@ -118,13 +160,13 @@ export default function ThreadDisplay() {
                 <div className="grid gap-1">
                   <div className="font-semibold">
                     {thread.emails[0]?.from?.name}
-                    <div className="text-xs line-clamp-1">
-                      {thread.emails[0]?.subject}
-                    </div>
-                    <div className="text-xs line-clamp-1">
-                      <span className="font-medium">Reply-To: </span>
-                      {thread.emails[0]?.from?.address}
-                    </div>
+                  </div>
+                  <div className="text-xs line-clamp-1">
+                    {thread.emails[0]?.subject}
+                  </div>
+                  <div className="text-xs line-clamp-1">
+                    <span className="font-medium">Reply-To: </span>
+                    {thread.emails[0]?.from?.address}
                   </div>
                 </div>
               </div>
@@ -137,14 +179,12 @@ export default function ThreadDisplay() {
             <Separator />
             <div className="flex-1 overflow-auto">
               <div className="p-4 flex flex-col gap-4">
-                {thread.emails.map((email) => {
-                  return <EmailDisplay key={email.id} email={email} />;
-                })}
+                {emailDisplays}
               </div>
             </div>
             <Separator />
             <div className="p-4">
-              <ReplyBox />
+              {memoizedReplyBox}
             </div>
           </div>
         </>

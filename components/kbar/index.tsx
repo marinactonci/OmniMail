@@ -12,9 +12,14 @@ import RenderResults from "./render-results";
 import { useLocalStorage } from "usehooks-ts";
 import useThemeSwitching from "./use-theme-switching";
 import useAccountSwitching from "./use-account-switching";
+import useComposeSwitching from "./use-compose-toggle";
 
 export default function Kbar({ children }: { children: React.ReactNode }) {
   const [_, setTab] = useLocalStorage("tab", "");
+  const [isComposeOpen, setIsComposeOpen] = useLocalStorage(
+    "isComposeOpen",
+    false
+  );
 
   const actions: Action[] = [
     {
@@ -59,6 +64,7 @@ export default function Kbar({ children }: { children: React.ReactNode }) {
 const ActualComponent = ({ children }: { children: React.ReactNode }) => {
   useAccountSwitching();
   useThemeSwitching();
+  useComposeSwitching();
 
   return (
     <>
