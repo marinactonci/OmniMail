@@ -23,6 +23,7 @@ export default function EmailEditor({}: Props) {
   const [value, setValue] = useState("");
   const [expended, setExpended] = useState(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const { threadId, threads } = UseThreads();
   const [isEditorReady, setIsEditorReady] = useState(false);
 
@@ -58,28 +59,35 @@ export default function EmailEditor({}: Props) {
 
   const modKey = isMac ? "⌘" : "Ctrl";
 
-  const handleAiAutoComplete = async () => {
-    console.log("handleAiAutoComplete called");
-    if (!editor) {
-      console.log("No editor instance");
-      return;
-    }
+  const animateText = async (text: string, editor: any) => {
+    const words = text.split(/\s+/);
+    const { state } = editor;
+    const currentPosition = state.selection.$head.pos;
 
+    for (const word of words) {
+      await new Promise(resolve => setTimeout(resolve, 50)); // Adjust speed as needed
+      editor.commands.insertContent(word + " ");
+    }
+  };
+
+  const handleAiAutoComplete = async () => {
+    if (!editor) return;
+
+    setIsGenerating(true);
     const { state } = editor;
     const currentPosition = state.selection.$head.pos;
     const currentContent = editor.getText().slice(0, currentPosition);
-    console.log("Current content:", currentContent);
 
     try {
-      console.log("Getting AI completion...");
       const completion = await getEmailCompletion(
         currentContent,
-        currentThread?.emails?.at(-1)?.body || "" // Now currentThread is defined
+        currentThread?.emails?.at(-1)?.body || ""
       );
-      console.log("Got completion:", completion);
-      editor.commands.insertContent(completion);
+      await animateText(completion, editor);
     } catch (error) {
       console.error("Error getting AI completion:", error);
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -186,13 +194,26 @@ export default function EmailEditor({}: Props) {
       <Separator />
       <div className="py-3 px-4 flex items-center justify-between">
         <span className="text-sm">
-          Tip: Press{" "}
-          <kbd className="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
-            {modKey} + J
-          </kbd>{" "}
-          for AI autocomplete.
+          {isGenerating ? (
+            <span className="flex items-center gap-1">
+              Generating
+              <span className="inline-flex">
+                <span className="animate-[bounce_1.4s_infinite_.1s]">.</span>
+                <span className="animate-[bounce_1.4s_infinite_.2s]">.</span>
+                <span className="animate-[bounce_1.4s_infinite_.3s]">.</span>
+              </span>
+            </span>
+          ) : (
+            <>
+              Tip: Press{" "}
+              <kbd className="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg">
+                {modKey} + J
+              </kbd>{" "}
+              for AI autocomplete
+            </>
+          )}
         </span>
-        <Button disabled={!editor || editor.isEmpty} onClick={() => send()}>
+        <Button disabled={!editor || editor.isEmpty || isGenerating} onClick={() => send()}>
           <Send className="mr-2 h-4 w-4" />
           Send
         </Button>
