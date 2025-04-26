@@ -153,7 +153,7 @@ export default function EmailEditor({}: Props) {
       <Separator />
       <div className="py-4 space-y-4">
         <div
-          className={`transition-all duration-700 ease-in-out ${
+          className={`transition-all duration-300 ease-in-out ${
             expended
               ? "opacity-100 max-h-60"
               : "opacity-0 max-h-0 overflow-hidden"

@@ -180,7 +180,7 @@ export default function ThreadDisplay() {
                 {emailDisplays}
               </div>
             </div>
-            <div className="p-4">
+            <div className="p-4 pb-2">
               {memoizedReplyBox}
             </div>
           </div>

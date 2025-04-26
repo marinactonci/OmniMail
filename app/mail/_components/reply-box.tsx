@@ -9,7 +9,7 @@ export default function ReplyBox() {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <>
+    <div className="pb-4">
       <Separator className="relative">
         <div className="absolute left-1/2 -translate-x-1/2 -top-3 bg-background px-2">
           <Button
@@ -38,10 +38,10 @@ export default function ReplyBox() {
           isExpanded ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0 overflow-hidden"
         )}
       >
-        <div className="p-4">
+        <div className="p-4 pb-0">
           <EmailEditor />
         </div>
       </div>
-    </>
+    </div>
   );
 }
