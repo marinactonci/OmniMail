@@ -180,7 +180,6 @@ export default function ThreadDisplay() {
                 {emailDisplays}
               </div>
             </div>
-            <Separator />
             <div className="p-4">
               {memoizedReplyBox}
             </div>

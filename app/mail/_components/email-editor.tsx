@@ -25,9 +25,11 @@ export default function EmailEditor({}: Props) {
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const { threadId, threads } = UseThreads();
-  const [isEditorReady, setIsEditorReady] = useState(false);
 
-  const currentThread = useMemo(() => threads?.find((t) => t.id === threadId), [threadId, threads]);
+  const currentThread = useMemo(
+    () => threads?.find((t) => t.id === threadId),
+    [threadId, threads]
+  );
 
   const frameworks = [
     {
@@ -61,11 +63,9 @@ export default function EmailEditor({}: Props) {
 
   const animateText = async (text: string, editor: any) => {
     const words = text.split(/\s+/);
-    const { state } = editor;
-    const currentPosition = state.selection.$head.pos;
 
     for (const word of words) {
-      await new Promise(resolve => setTimeout(resolve, 50)); // Adjust speed as needed
+      await new Promise((resolve) => setTimeout(resolve, 50)); // Adjust speed as needed
       editor.commands.insertContent(word + " ");
     }
   };
@@ -125,19 +125,16 @@ export default function EmailEditor({}: Props) {
     onUpdate: ({ editor }) => {
       setValue(editor.getHTML());
     },
-    onCreate: ({ editor }) => {
-      setIsEditorReady(true);
-    },
     editorProps: {
       handleKeyDown: (view, event) => {
-        if ((event.metaKey || event.ctrlKey) && event.key === 'j') {
+        if ((event.metaKey || event.ctrlKey) && event.key === "j") {
           event.preventDefault();
           handleAiAutoComplete();
           return true;
         }
         return false;
-      }
-    }
+      },
+    },
   });
 
   const send = () => {
@@ -213,7 +210,10 @@ export default function EmailEditor({}: Props) {
             </>
           )}
         </span>
-        <Button disabled={!editor || editor.isEmpty || isGenerating} onClick={() => send()}>
+        <Button
+          disabled={!editor || editor.isEmpty || isGenerating}
+          onClick={() => send()}
+        >
           <Send className="mr-2 h-4 w-4" />
           Send
         </Button>

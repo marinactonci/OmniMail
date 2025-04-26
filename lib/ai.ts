@@ -22,6 +22,7 @@ export async function generateEmailContent(prompt: string): Promise<string> {
 - Use appropriate greetings and closings. User's name for closings is ${session.user.name}
 - Be concise, kind, polite, respectful and professional
 - Use proper paragraph spacing (use double newlines between paragraphs)
+- Not include any html tags or code blocks, just plain text
 - Match the tone to the context
 - Include only the final email, no options or explanations
 
@@ -48,6 +49,8 @@ export async function getEmailCompletion(
 - Use appropriate greetings and closings. User's name for closings is ${session.user.name}
 - Be concise, kind, polite, respectful and professional
 - Flow naturally from the current text
+- Use proper paragraph spacing (use double newlines between paragraphs)
+- Not include any html tags or code blocks, just plain text
 - Only include the continuation text, no explanations or options
 - Consider the context of the previous email when relevant
 
@@ -61,6 +64,8 @@ ${currentText}`
 - Use appropriate greetings and closings. User's name for closings is ${session.user.name}
 - Be concise, kind, polite, respectful and professional
 - Flow naturally from the current text
+- Use proper paragraph spacing (use double newlines between paragraphs)
+- Not include any html tags or code blocks, just plain text
 - Only include the continuation text, no explanations or options
 - Maintain a clear and professional email structure
 
