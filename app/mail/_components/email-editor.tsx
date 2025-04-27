@@ -10,16 +10,40 @@ import Placeholder from "@tiptap/extension-placeholder";
 import EditorOptions from "./editor-options";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { BotMessageSquare, File, Send } from "lucide-react";
+import { BotMessageSquare, File, LoaderCircle, Send } from "lucide-react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Input } from "@/components/ui/input";
 import { getEmailCompletion } from "@/lib/ai";
 import UseThreads from "@/hooks/use-threads";
 import AiPromptModal from "./ai-prompt-modal";
 
-type Props = {};
+type Props = {
+  subject?: string;
+  setSubject?: (subject: string) => void;
+  toValues?: string[];
+  setToValues?: (values: string[]) => void;
+  ccValues?: string[];
+  setCcValues?: (values: string[]) => void;
+  bccValues?: string[];
+  setBccValues?: (values: string[]) => void;
+  to?: string;
+  isSending?: boolean;
+  handleSend?: (value: string) => void;
+};
 
-export default function EmailEditor({}: Props) {
+export default function EmailEditor({
+  subject,
+  setSubject,
+  toValues,
+  setToValues,
+  ccValues,
+  setCcValues,
+  bccValues,
+  setBccValues,
+  to,
+  isSending,
+  handleSend,
+}: Props) {
   const [value, setValue] = useState("");
   const [expended, setExpended] = useState(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
@@ -30,29 +54,6 @@ export default function EmailEditor({}: Props) {
     () => threads?.find((t) => t.id === threadId),
     [threadId, threads]
   );
-
-  const frameworks = [
-    {
-      value: "next.js",
-      label: "Next.js",
-    },
-    {
-      value: "sveltekit",
-      label: "SvelteKit",
-    },
-    {
-      value: "nuxt.js",
-      label: "Nuxt.js",
-    },
-    {
-      value: "remix",
-      label: "Remix",
-    },
-    {
-      value: "astro",
-      label: "Astro",
-    },
-  ];
 
   const isMac = useMemo(() => {
     if (typeof window === "undefined") return false;
@@ -90,6 +91,21 @@ export default function EmailEditor({}: Props) {
       setIsGenerating(false);
     }
   };
+
+  const options = [
+    {
+      label: "To",
+      value: "to",
+    },
+    {
+      label: "Cc",
+      value: "cc",
+    },
+    {
+      label: "Bcc",
+      value: "bcc",
+    },
+  ];
 
   const editor = useEditor({
     extensions: [
@@ -160,9 +176,16 @@ export default function EmailEditor({}: Props) {
           }`}
         >
           <div className="space-y-4">
-            <MultiSelect options={frameworks} label="To" />
-            <MultiSelect options={frameworks} label="Cc" />
-            <Input type="text" placeholder="Subject" />
+            <MultiSelect options={options} label="To" />
+            <MultiSelect options={options} label="Cc" />
+            <Input
+              type="text"
+              placeholder="Subject"
+              value={subject}
+              onChange={(e) => {
+                setSubject && setSubject(e.target.value);
+              }}
+            />
           </div>
           <Separator className="mt-4" />
         </div>
@@ -211,10 +234,14 @@ export default function EmailEditor({}: Props) {
           )}
         </span>
         <Button
-          disabled={!editor || editor.isEmpty || isGenerating}
+          disabled={!editor || editor.isEmpty || isGenerating || isSending}
           onClick={() => send()}
         >
-          <Send className="mr-2 h-4 w-4" />
+          {isSending ? (
+            <LoaderCircle className="size-4" />
+          ) : (
+            <Send className="size-4" />
+          )}
           Send
         </Button>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,7 @@ export function MultiSelect({ options, label }: Props) {
           aria-expanded={open}
           className="w-full justify-between"
         >
-          <div className="flex gap-2 items-center justify-start flex-1">
+          <div className="flex gap-2 items-center justify-start flex-1 flex-wrap">
             {label && (
               <span className="text-sm text-muted-foreground mr-2">{label}</span>
             )}
@@ -57,20 +57,25 @@ export function MultiSelect({ options, label }: Props) {
               ? value.map((val, i) => (
                   <div
                     key={i}
-                    className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium bg-secondary text-secondary-foreground"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSetValue(val);
+                    }}
+                    className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium bg-secondary text-secondary-foreground gap-1 cursor-pointer hover:opacity-70 transition-opacity"
                   >
-                    {options.find((option) => option.value === val)?.label}
+                    <span>{options.find((option) => option.value === val)?.label}</span>
+                    <X className="h-3 w-3" />
                   </div>
                 ))
-              : "Select framework..."}
+              : "Select an email address..."}
           </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandInput placeholder="Search emails..." />
+          <CommandEmpty>No emails found.</CommandEmpty>
           <CommandList>
             <CommandGroup>
               {options.map((option) => (

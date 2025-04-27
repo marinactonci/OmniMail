@@ -1,3 +1,4 @@
+import { EmailAddress } from "@/types/email-address";
 import { EmailMessage } from "@/types/email-message";
 import { SyncResponse } from "@/types/sync-response";
 import { SyncUpdatedResponse } from "@/types/sync-updated-response";
@@ -32,17 +33,19 @@ export class Account {
       } catch (error) {
         if (
           axios.isAxiosError(error) &&
-          (error.code === 'ECONNRESET' || error.code === 'ETIMEDOUT') &&
+          (error.code === "ECONNRESET" || error.code === "ETIMEDOUT") &&
           attempt < retryCount - 1
         ) {
           // Wait before retry (exponential backoff)
-          await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+          await new Promise((resolve) =>
+            setTimeout(resolve, Math.pow(2, attempt) * 1000)
+          );
           continue;
         }
         throw error;
       }
     }
-    throw new Error('Max retry attempts reached');
+    throw new Error("Max retry attempts reached");
   }
 
   async getUpdatedEmails({
@@ -126,10 +129,76 @@ export class Account {
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Error performing initial sync:", JSON.stringify(error.response?.data, null, 2));
+        console.error(
+          "Error performing initial sync:",
+          JSON.stringify(error.response?.data, null, 2)
+        );
         throw error; // Re-throw the error to handle it in the calling code
       } else {
         console.error("Error performing initial sync:", error);
+        throw error;
+      }
+    }
+  }
+
+  async sendEmail({
+    from,
+    subject,
+    body,
+    inReplyTo,
+    threadId,
+    references,
+    to,
+    cc,
+    bcc,
+    replyTo,
+  }: {
+    from: EmailAddress;
+    subject: string;
+    body: string;
+    inReplyTo?: string;
+    threadId?: string;
+    references?: string[];
+    to: EmailAddress[];
+    cc?: EmailAddress[];
+    bcc?: EmailAddress[];
+    replyTo?: EmailAddress;
+  }) {
+    try {
+      const response = await axios.post(
+        "https://api.aurinko.io/v1/email/messages",
+        {
+          from,
+          subject,
+          body,
+          inReplyTo,
+          threadId,
+          references,
+          to,
+          cc,
+          bcc,
+          replyTo: [replyTo],
+        },
+        {
+          params: {
+            returnIds: true,
+          },
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        }
+      );
+      console.log("Email sent successfully:", response.data);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          "Error sending email:",
+          JSON.stringify(error.response?.data, null, 2)
+        );
+        throw error;
+      } else {
+        console.error("Error sending email:", error);
         throw error;
       }
     }
