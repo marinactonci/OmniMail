@@ -49,7 +49,7 @@ export const emailRouter = router({
         cc: z.array(emailAddressSchema).optional(),
         bcc: z.array(emailAddressSchema).optional(),
         to: z.array(emailAddressSchema),
-        replyTo: emailAddressSchema.optional(),
+        replyTo: emailAddressSchema,
         inReplyTo: z.string().optional(),
         threadId: z.string().optional(),
       })
@@ -71,14 +71,13 @@ export const emailRouter = router({
       await acc.sendEmail({
         body: input.body,
         subject: input.subject,
-        from: input.from,
-        to: input.to,
-        cc: input.cc,
-        bcc: input.bcc,
-        replyTo: input.replyTo,
-        inReplyTo: input.inReplyTo,
         threadId: input.threadId,
-        references: [],
-      });
+        to: input.to,
+        bcc: input.bcc,
+        cc: input.cc,
+        replyTo: input.replyTo,
+        from: input.from,
+        inReplyTo: input.inReplyTo,
+    })
     }),
 });

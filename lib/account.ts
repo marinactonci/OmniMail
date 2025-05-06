@@ -233,7 +233,7 @@ export class Account {
         to,
         cc,
         bcc,
-        replyTo,
+        replyTo: [replyTo],
       });
 
       const response = await axios.post(
@@ -248,7 +248,7 @@ export class Account {
           to,
           cc,
           bcc,
-          replyTo,
+          replyTo: [replyTo],
         },
         {
           params: {
