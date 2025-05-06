@@ -11,7 +11,7 @@ import {
   ReplyAll,
   Trash2,
 } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +33,6 @@ import ReplyBox from "./reply-box";
 export default function ThreadDisplay() {
   const { threadId, threads } = UseThreads();
   const thread = useMemo(() => threads?.find((t) => t.id === threadId), [threadId, threads]);
-  const [replyContent, setReplyContent] = useState("");
 
   // Memoize the email displays to prevent unnecessary re-renders
   const emailDisplays = useMemo(() => {

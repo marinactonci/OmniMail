@@ -129,13 +129,13 @@ const Component = ({
     <EmailEditor
       subject={subject}
       setSubject={setSubject}
-      // @ts-ignore
+      // @ts-expect-error This is a workaround for the type error
       toValues={toValues}
-      // @ts-ignore
+      // @ts-expect-error This is a workaround for the type error
       setToValues={setToValues}
-      // @ts-ignore
+      // @ts-expect-error This is a workaround for the type error
       ccValues={ccValues}
-      // @ts-ignore
+      // @ts-expect-error This is a workaround for the type error
       setCcValues={setCcValues}
       handleSend={handleSubmit}
       to={replyDetails?.to.map((to) => to.address) ?? []}

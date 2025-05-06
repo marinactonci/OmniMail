@@ -13,7 +13,7 @@ const useAccountSwitching = () => {
         shortcut: ['e', 's'],
         section: "Accounts",
     }]
-    const [_, setAccountId] = useLocalStorage('accountId', '')
+    const [, setAccountId] = useLocalStorage('accountId', '')
 
     React.useEffect(() => {
         const handler = (event: KeyboardEvent) => {
@@ -32,7 +32,7 @@ const useAccountSwitching = () => {
         };
     }, [accounts, setAccountId]);
 
-    useRegisterActions(mainAction.concat((accounts?.map((account, index) => {
+    useRegisterActions(mainAction.concat((accounts?.map((account) => {
         return {
             id: account.id,
             name: account.name,

@@ -54,7 +54,7 @@ export default function ThreadItem({ thread }: Props) {
       ></div>
       {thread.emails.at(-1)?.sysLabels.length && (
         <div className="flex items-center gap-2">
-          {thread.emails.at(-1)?.sysLabels.map((label: any) => (
+          {thread.emails.at(-1)?.sysLabels.map((label) => (
             <Badge key={label} variant={getBadgeVariantFromLabel(label)}>
               {label}
             </Badge>

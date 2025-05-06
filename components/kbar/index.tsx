@@ -15,11 +15,7 @@ import useAccountSwitching from "./use-account-switching";
 import useComposeSwitching from "./use-compose-toggle";
 
 export default function Kbar({ children }: { children: React.ReactNode }) {
-  const [_, setTab] = useLocalStorage("tab", "");
-  const [isComposeOpen, setIsComposeOpen] = useLocalStorage(
-    "isComposeOpen",
-    false
-  );
+  const [, setTab] = useLocalStorage("tab", "");
 
   const actions: Action[] = [
     {

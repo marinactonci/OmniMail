@@ -261,8 +261,9 @@ export default function HomePage() {
                     Simple, Transparent Pricing
                   </h2>
                   <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                    Choose the plan that's right for you and start transforming
-                    your email experience today.
+                    {
+                      "Choose the plan that's right for you and start transforming your email experience today."
+                    }
                   </p>
                 </div>
               </div>
@@ -430,9 +431,9 @@ export default function HomePage() {
                       </div>
                     </div>
                     <p className="mt-4 text-muted-foreground">
-                      "OmniMail has completely transformed how I handle my
+                      {`"OmniMail has completely transformed how I handle my
                       inbox. I save at least 5 hours every week and never miss
-                      important emails anymore."
+                      important emails anymore."`}
                     </p>
                   </div>
                   <div className="mt-4 flex">
@@ -471,9 +472,9 @@ export default function HomePage() {
                       </div>
                     </div>
                     <p className="mt-4 text-muted-foreground">
-                      "As a founder, I was drowning in emails. OmniMail's AI
+                      {`"As a founder, I was drowning in emails. OmniMail's AI
                       prioritization has been a game-changer for my productivity
-                      and response time."
+                      and response time."`}
                     </p>
                   </div>
                   <div className="mt-4 flex">
@@ -512,9 +513,9 @@ export default function HomePage() {
                       </div>
                     </div>
                     <p className="mt-4 text-muted-foreground">
-                      "The smart templates and response suggestions have made my
+                      {`"The smart templates and response suggestions have made my
                       communication more efficient and professional. I can't
-                      imagine going back."
+                      imagine going back."`}
                     </p>
                   </div>
                   <div className="mt-4 flex">

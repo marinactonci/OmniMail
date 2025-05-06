@@ -57,7 +57,7 @@ export class Account {
     deltaToken?: string;
     pageToken?: string;
   }) {
-    let params: Record<string, string> = {};
+    const params: Record<string, string> = {};
     if (deltaToken) {
       params.deltaToken = deltaToken;
     }

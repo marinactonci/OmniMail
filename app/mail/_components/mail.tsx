@@ -31,7 +31,7 @@ export default function Mail({
   defaultCollapsed,
 }: Props) {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
-  const [_, setDone] = useLocalStorage("done", false);
+  const [, setDone] = useLocalStorage("done", false);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
 

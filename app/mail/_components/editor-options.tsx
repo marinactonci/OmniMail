@@ -25,19 +25,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useMemo } from "react";
 
 const EditorOptions = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
     return null;
   }
 
-  const isMac = useMemo(() => {
+  const isMac = () => {
     if (typeof window === "undefined") return false;
-    return navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-  }, []);
+    return navigator.platform.toUpperCase().indexOf("MAC") >= 0 ? "⌘" : "Ctrl";
+  }
 
-  const modKey = isMac ? "⌘" : "Ctrl";
+  const modKey = isMac();
 
   return (
     <TooltipProvider>

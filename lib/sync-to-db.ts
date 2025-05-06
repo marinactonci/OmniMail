@@ -143,13 +143,13 @@ async function upsertEmail(
         bcc: { set: bccAddresses.map((addr) => ({ id: addr!.id })) },
         replyTo: { set: replyToAddresses.map((addr) => ({ id: addr!.id })) },
         hasAttachments: email.hasAttachments,
-        internetHeaders: email.internetHeaders as any,
+        internetHeaders: email.internetHeaders,
         body: email.body,
         bodySnippet: email.bodySnippet,
         inReplyTo: email.inReplyTo,
         references: email.references,
         threadIndex: email.threadIndex,
-        nativeProperties: email.nativeProperties as any,
+        nativeProperties: email.nativeProperties,
         folderId: email.folderId,
         omitted: email.omitted,
         emailLabel: emailLabelType,
@@ -165,7 +165,7 @@ async function upsertEmail(
         internetMessageId: email.internetMessageId,
         subject: email.subject,
         sysLabels: email.sysLabels,
-        internetHeaders: email.internetHeaders as any,
+        internetHeaders: email.internetHeaders,
         keywords: email.keywords,
         sysClassifications: email.sysClassifications,
         sensitivity: email.sensitivity,
@@ -183,7 +183,7 @@ async function upsertEmail(
         inReplyTo: email.inReplyTo,
         references: email.references,
         threadIndex: email.threadIndex,
-        nativeProperties: email.nativeProperties as any,
+        nativeProperties: email.nativeProperties,
         folderId: email.folderId,
         omitted: email.omitted,
       },
@@ -215,7 +215,9 @@ async function upsertEmail(
     for (const attachment of email.attachments) {
       await upsertAttachment(email.id, attachment);
     }
-  } catch (e) {}
+  } catch (e) {
+    console.log("error upserting email", e, email.id, email.subject);
+  }
 }
 
 async function upsertEmailAddress(address: EmailAddress, accountId: string) {

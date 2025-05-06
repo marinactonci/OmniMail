@@ -1,7 +1,7 @@
 import UseThreads from "@/hooks/use-threads";
 import { format } from "date-fns";
 import ThreadItem from "./thread-item";
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 interface Props {
   searchQuery?: string;
@@ -9,7 +9,7 @@ interface Props {
 
 export default function ThreadList({ searchQuery = "" }: Props) {
   const { threads, setThreadId, threadId } = UseThreads();
-  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const [, setFocusedIndex] = useState(-1);
   const threadsRef = useRef<HTMLDivElement>(null);
   const isInitialMount = useRef(true);
 
@@ -100,7 +100,7 @@ export default function ThreadList({ searchQuery = "" }: Props) {
     return (
       <div className="flex items-center justify-center h-full pt-12">
         <p className="text-sm text-muted-foreground">
-          No threads found for "{searchQuery}"
+          {`No threads found for "${searchQuery}"˛`}
         </p>
       </div>
     );

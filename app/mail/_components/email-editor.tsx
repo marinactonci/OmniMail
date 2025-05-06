@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { EditorContent, useEditor } from "@tiptap/react";
+import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { Text } from "@tiptap/extension-text";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -68,7 +68,7 @@ export default function EmailEditor({
 
   const modKey = isMac ? "⌘" : "Ctrl";
 
-  const animateText = async (text: string, editor: any) => {
+  const animateText = async (text: string, editor: Editor) => {
     const words = text.split(/\s+/);
 
     for (const word of words) {

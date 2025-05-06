@@ -1,13 +1,12 @@
 import { Letter } from "react-letter";
 import UseThreads from "@/hooks/use-threads";
-import { RouterOutputs, trpc } from "@/server/client";
+import { RouterOutputs } from "@/server/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Paperclip, FileIcon } from "lucide-react";
 import { formatBytes } from "@/lib/utils";
-import { useState } from "react";
 
 type Props = {
   email: RouterOutputs["thread"]["getAllThreads"][0]["emails"][0];

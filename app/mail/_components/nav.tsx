@@ -21,7 +21,7 @@ type Props = {
 };
 
 export function Nav({ links, isCollapsed }: Props) {
-  const [_, setTab] = useLocalStorage("tab", "inbox");
+  const [, setTab] = useLocalStorage("tab", "inbox");
 
   return (
     <div

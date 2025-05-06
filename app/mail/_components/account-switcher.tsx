@@ -1,7 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
 import { cn } from "@/lib/utils";
 import {
   Select,
@@ -15,7 +13,6 @@ import { Mail } from "lucide-react";
 import { AddAccountButton } from "@/components/add-account-button";
 import { SiGmail } from "react-icons/si";
 import { PiMicrosoftOutlookLogo } from "react-icons/pi";
-import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/server/client";
 
 type Props = {
@@ -42,7 +39,7 @@ export function AccountSwitcher({ isCollapsed }: Props) {
               <>
                 {(() => {
                   const selected = accounts.find(
-                    (account: any) => account.id === accountId
+                    (account) => account.id === accountId
                   );
                   if (!selected) return <Mail className="h-4 w-4" />;
                   if (selected.provider === "Office365")
@@ -54,7 +51,7 @@ export function AccountSwitcher({ isCollapsed }: Props) {
                 <span className={cn("ml-2", isCollapsed && "hidden")}>
                   {
                     accounts.find(
-                      (account: any) => account.id === accountId
+                      (account) => account.id === accountId
                     )?.emailAddress
                   }
                 </span>
@@ -67,7 +64,7 @@ export function AccountSwitcher({ isCollapsed }: Props) {
         <SelectContent>
           {accounts && accounts.length > 0 ? (
             <>
-              {accounts.map((account: any) => (
+              {accounts.map((account) => (
                 <SelectItem
                   key={account.emailAddress}
                   value={account.id}
@@ -75,7 +72,7 @@ export function AccountSwitcher({ isCollapsed }: Props) {
                   <div className="flex items-center gap-3 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground">
                     {(() => {
                       const selected = accounts.find(
-                        (account: any) => account.id === accountId
+                        (account) => account.id === accountId
                       );
                       if (!selected) return <Mail className="h-4 w-4" />;
                       if (selected.provider === "Office365")

@@ -29,7 +29,7 @@ const TagInput: React.FC<TagInputProps> = ({ suggestions, defaultValues = [], la
         <span className='mx-3 text-sm text-gray-500'>{label}</span>
         <Select
             value={value}
-            // @ts-ignore
+            // @ts-expect-error This is a workaround for the type error
             onChange={onChange}
             className='w-full flex-1'
             isMulti

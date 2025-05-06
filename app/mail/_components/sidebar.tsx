@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { Nav } from "./nav";
 import { File, Inbox, Pencil, Send } from "lucide-react";
@@ -48,18 +48,18 @@ function Sidebar({ isCollapsed }: Props) {
   const [ccValues, setCcValues] = useState<{ label: string; value: string }[]>(
     []
   );
-  const [bccValues, setBccValues] = useState<
+  const [bccValues] = useState<
     { label: string; value: string }[]
   >([]);
 
   const sendEmail = trpc.email.sendEmail.useMutation();
 
-  const handleSubmit = async (value: any) => {
+  const handleSubmit = async (value: string) => {
     sendEmail.mutate(
       {
         accountId,
         threadId: undefined,
-        body: String(value),
+        body: value,
         subject: String(subject),
         from: {
           name: account?.name ?? "",
@@ -112,13 +112,13 @@ function Sidebar({ isCollapsed }: Props) {
             <EmailEditor
               subject={subject}
               setSubject={setSubject}
-              // @ts-ignore
+              // @ts-expect-error This is a workaround for the type error
               toValues={toValues}
-              // @ts-ignore
+              // @ts-expect-error This is a workaround for the type error
               setToValues={setToValues}
-              // @ts-ignore
+              // @ts-expect-error This is a workaround for the type error
               ccValues={ccValues}
-              // @ts-ignore
+              // @ts-expect-error This is a workaround for the type error
               setCcValues={setCcValues}
               handleSend={handleSubmit}
               to={toValues.map((to) => to.value)}
