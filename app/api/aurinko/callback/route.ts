@@ -78,7 +78,7 @@ export const GET = async (req: NextRequest) => {
   return NextResponse.redirect(new URL("/mail", req.url));
 };
 
-export const exchangeCodeForAccessToken = async (code: string) => {
+const exchangeCodeForAccessToken = async (code: string) => {
   const maxRetries = 3;
   let retryCount = 0;
 
