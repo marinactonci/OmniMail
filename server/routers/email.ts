@@ -49,7 +49,7 @@ export const emailRouter = router({
         cc: z.array(emailAddressSchema).optional(),
         bcc: z.array(emailAddressSchema).optional(),
         to: z.array(emailAddressSchema),
-        replyTo: emailAddressSchema,
+        replyTo: emailAddressSchema.optional(),
         inReplyTo: z.string().optional(),
         threadId: z.string().optional(),
       })

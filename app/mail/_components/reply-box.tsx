@@ -63,7 +63,7 @@ const Component = ({
 }) => {
   const { accountId, threadId } = UseThreads();
 
-  const [subject, setSubject] = useState<string>("");
+  const [subject, setSubject] = useState("");
   const [toValues, setToValues] = useState<{ label: string; value: string }[]>(
     []
   );
@@ -92,7 +92,7 @@ const Component = ({
 
   const sendEmail = trpc.email.sendEmail.useMutation();
 
-  const handlSubmit = async (value: string) => {
+  const handleSubmit = async (value: string) => {
     if (!replyDetails) return;
 
     sendEmail.mutate(
@@ -123,7 +123,6 @@ const Component = ({
         },
       }
     );
-    console.log(value);
   };
 
   return (
@@ -138,7 +137,7 @@ const Component = ({
       ccValues={ccValues}
       // @ts-ignore
       setCcValues={setCcValues}
-      handleSend={handlSubmit}
+      handleSend={handleSubmit}
       to={replyDetails?.to.map((to) => to.address) ?? []}
       isSending={sendEmail.isPending}
       hasBcc={false}

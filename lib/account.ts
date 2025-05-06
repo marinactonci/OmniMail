@@ -208,7 +208,7 @@ export class Account {
     to,
     cc,
     bcc,
-    replyTo,
+    replyTo, // replyTo is EmailAddress | undefined
   }: {
     from: EmailAddress;
     subject: string;
@@ -222,8 +222,18 @@ export class Account {
     replyTo?: EmailAddress;
   }) {
     try {
-
-      console.log("Sending email with the following details:", {
+      const aurinkoPayload: {
+        from: EmailAddress;
+        subject: string;
+        body: string;
+        inReplyTo?: string;
+        threadId?: string;
+        references?: string[];
+        to: EmailAddress[];
+        cc?: EmailAddress[];
+        bcc?: EmailAddress[];
+        replyTo?: EmailAddress[]; // replyTo is an array of EmailAddress or undefined
+      } = {
         from,
         subject,
         body,
@@ -233,23 +243,19 @@ export class Account {
         to,
         cc,
         bcc,
-        replyTo: [replyTo],
-      });
+      };
+
+      if (replyTo) {
+        aurinkoPayload.replyTo = [replyTo]; // If replyTo is defined, set it as an array
+      }
+      // If replyTo was undefined, aurinkoPayload.replyTo remains undefined,
+      // and axios will omit it from the JSON sent to Aurinko.
+
+      console.log("Sending email to Aurinko with payload:", aurinkoPayload);
 
       const response = await axios.post(
         "https://api.aurinko.io/v1/email/messages",
-        {
-          from,
-          subject,
-          body,
-          inReplyTo,
-          threadId,
-          references,
-          to,
-          cc,
-          bcc,
-          replyTo: [replyTo],
-        },
+        aurinkoPayload, // Send the modified payload
         {
           params: {
             returnIds: true,
