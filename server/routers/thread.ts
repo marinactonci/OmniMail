@@ -47,7 +47,10 @@ export const threadRouter = router({
       };
 
       return await prisma.thread.findMany({
-        where: filter,
+        where: {
+          accountId: input.accountId,
+          ...filter,
+        },
         include: {
           emails: {
             orderBy: {
