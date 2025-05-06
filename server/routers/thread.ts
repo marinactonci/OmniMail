@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { authorizeAccountAccess } from "@/lib/authorize-account-access";
+import { Account } from "@/lib/account";
 
 export const threadRouter = router({
   getAllThreads: procedure
@@ -28,6 +29,9 @@ export const threadRouter = router({
         input.accountId,
         session.user.id
       );
+
+      const acc = new Account(account.accessToken);
+      acc.syncEmails().catch(console.error);
 
       let filter: Prisma.ThreadWhereInput = {};
       if (input.tab === "inbox") {
@@ -72,7 +76,6 @@ export const threadRouter = router({
             },
           },
         },
-        //take: 15,
         orderBy: {
           lastMessageDate: "desc",
         },

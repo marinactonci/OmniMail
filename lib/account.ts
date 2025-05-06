@@ -3,6 +3,8 @@ import { EmailMessage } from "@/types/email-message";
 import { SyncResponse } from "@/types/sync-response";
 import { SyncUpdatedResponse } from "@/types/sync-updated-response";
 import axios from "axios";
+import prisma from "./prisma";
+import { syncEmailsToDatabase } from "./sync-to-db";
 
 export class Account {
   private token: string;
@@ -141,6 +143,61 @@ export class Account {
     }
   }
 
+  async syncEmails() {
+    const account = await prisma.emailAccount.findUnique({
+      where: {
+        accessToken: this.token,
+      },
+    });
+
+    if (!account) {
+      throw new Error("Account not found");
+    }
+
+    if (!account.nextDeltaToken) {
+      throw new Error("No delta token found for account");
+    }
+
+    let response = await this.getUpdatedEmails({
+      deltaToken: account.nextDeltaToken,
+    });
+
+    let storedDeltaToken = account.nextDeltaToken;
+    let allEmails: EmailMessage[] = response.records;
+
+    if (response.nextDeltaToken) {
+      storedDeltaToken = response.nextDeltaToken;
+    }
+
+    while (response.nextPageToken) {
+      response = await this.getUpdatedEmails({
+        pageToken: response.nextPageToken,
+      });
+      allEmails = allEmails.concat(response.records);
+      if (response.nextDeltaToken) {
+        storedDeltaToken = response.nextDeltaToken;
+      }
+    }
+
+    try {
+      syncEmailsToDatabase(allEmails, account.id);
+    } catch (error) {
+      console.error("Error syncing emails to database:", error);
+    }
+
+    await prisma.emailAccount.update({
+      where: { id: account.id },
+      data: {
+        nextDeltaToken: storedDeltaToken,
+      },
+    });
+
+    return {
+      emails: allEmails,
+      deltaToken: storedDeltaToken,
+    };
+  }
+
   async sendEmail({
     from,
     subject,
@@ -165,6 +222,20 @@ export class Account {
     replyTo?: EmailAddress;
   }) {
     try {
+
+      console.log("Sending email with the following details:", {
+        from,
+        subject,
+        body,
+        inReplyTo,
+        threadId,
+        references,
+        to,
+        cc,
+        bcc,
+        replyTo,
+      });
+
       const response = await axios.post(
         "https://api.aurinko.io/v1/email/messages",
         {
@@ -177,7 +248,7 @@ export class Account {
           to,
           cc,
           bcc,
-          replyTo: [replyTo],
+          replyTo,
         },
         {
           params: {
