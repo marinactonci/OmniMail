@@ -49,9 +49,7 @@ export default function ReplyBox() {
         )}
       >
         <div className="p-4 pb-0">
-          <Component //@ts-ignore
-            replyDetails={replyDetails}
-          />
+          <Component replyDetails={replyDetails} />
         </div>
       </div>
     </div>
@@ -61,22 +59,21 @@ export default function ReplyBox() {
 const Component = ({
   replyDetails,
 }: {
-  replyDetails: RouterOutputs["account"]["getReplyDetails"] | undefined; // important
+  replyDetails: RouterOutputs["account"]["getReplyDetails"] | undefined;
 }) => {
   const { accountId, threadId } = UseThreads();
 
-  const [subject, setSubject] = useState<string>(""); // Default empty string
+  const [subject, setSubject] = useState<string>("");
   const [toValues, setToValues] = useState<{ label: string; value: string }[]>(
     []
-  ); // Default empty array
+  );
   const [ccValues, setCcValues] = useState<{ label: string; value: string }[]>(
     []
-  ); // Default empty array
+  );
 
   useEffect(() => {
     if (!threadId || !replyDetails) return;
 
-    // check if there is a subject before to set the state.
     if (replyDetails.subject) {
       if (!replyDetails.subject.startsWith("Re:")) {
         setSubject(`Re: ${replyDetails.subject}`);
@@ -98,25 +95,34 @@ const Component = ({
   const handlSubmit = async (value: string) => {
     if (!replyDetails) return;
 
-    sendEmail.mutate({
-      accountId,
-      threadId: threadId ?? undefined,
-      body: value,
-      subject,
-      from: replyDetails.from,
-      to: replyDetails.to.map(to => ({ address: to.address, name: to.name ?? "" })),
-      cc: replyDetails.cc.map(cc => ({ address: cc.address, name: cc.name ?? "" })),
-      replyTo: replyDetails.from,
-      inReplyTo: replyDetails.id
-    }, {
-      onSuccess: () => {
-        toast.success("Email Sent!");
+    sendEmail.mutate(
+      {
+        accountId,
+        threadId: threadId ?? undefined,
+        body: value,
+        subject,
+        from: replyDetails.from,
+        to: replyDetails.to.map((to) => ({
+          address: to.address,
+          name: to.name ?? "",
+        })),
+        cc: replyDetails.cc.map((cc) => ({
+          address: cc.address,
+          name: cc.name ?? "",
+        })),
+        replyTo: replyDetails.from,
+        inReplyTo: replyDetails.id,
       },
-      onError: (error) => {
-        console.log(error)
-        toast.error("Error sending email")
+      {
+        onSuccess: () => {
+          toast.success("Email Sent!");
+        },
+        onError: (error) => {
+          console.log(error);
+          toast.error("Error sending email");
+        },
       }
-    });
+    );
     console.log(value);
   };
 
@@ -126,13 +132,16 @@ const Component = ({
       setSubject={setSubject}
       // @ts-ignore
       toValues={toValues}
-      setToValues={() => setToValues}
+      // @ts-ignore
+      setToValues={setToValues}
       // @ts-ignore
       ccValues={ccValues}
-      setCcValues={() => setCcValues}
+      // @ts-ignore
+      setCcValues={setCcValues}
       handleSend={handlSubmit}
       to={replyDetails?.to.map((to) => to.address) ?? []}
       isSending={sendEmail.isPending}
+      hasBcc={false}
     />
   );
 };

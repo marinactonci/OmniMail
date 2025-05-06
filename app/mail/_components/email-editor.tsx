@@ -16,25 +16,23 @@ import { getEmailCompletion } from "@/lib/ai";
 import UseThreads from "@/hooks/use-threads";
 import AiPromptModal from "./ai-prompt-modal";
 import TagInput from "@/components/ui/tag-input";
-
-type SelectOption = {
-  label: React.JSX.Element;
-  value: string;
-};
+import { SelectOption } from "@/types/select-option";
+import { trpc } from "@/server/client";
 
 type Props = {
   subject: string;
   setSubject: (subject: string) => void;
   toValues: SelectOption[];
-  setToValues: (values: string[]) => void;
+  setToValues: (values: SelectOption[]) => void;
   ccValues: SelectOption[];
-  setCcValues: (values: string[]) => void;
+  setCcValues: (values: SelectOption[]) => void;
   bccValues: SelectOption[];
-  setBccValues: (values: string[]) => void;
+  setBccValues: (values: SelectOption[]) => void;
   to: string[];
   isSending: boolean;
   handleSend: (value: string) => void;
   defaultToolbarExpended: boolean;
+  hasBcc: boolean;
 };
 
 export default function EmailEditor({
@@ -50,6 +48,7 @@ export default function EmailEditor({
   isSending,
   handleSend,
   defaultToolbarExpended = false,
+  hasBcc = true,
 }: Props) {
   const [value, setValue] = useState("");
   const [expended, setExpended] = useState(defaultToolbarExpended);
@@ -156,24 +155,30 @@ export default function EmailEditor({
     }
   };
 
-  // Since toValues, ccValues, bccValues are ALREADY SelectOption[],
-  // we no longer need to map them.  Just use them directly.
   const toValueOptions = toValues ?? [];
   const ccValueOptions = ccValues ?? [];
   const bccValueOptions = bccValues ?? [];
 
-  // Handler to convert SelectOption[] back to string[] when TagInput changes
   const handleToChange = (newOptions: SelectOption[]) => {
-    setToValues(newOptions.map((option) => option.value));
+    setToValues(newOptions);
   };
 
   const handleCcChange = (newOptions: SelectOption[]) => {
-    setCcValues(newOptions.map((option) => option.value));
+    setCcValues(newOptions);
   };
 
   const handleBccChange = (newOptions: SelectOption[]) => {
-    setBccValues(newOptions.map((option) => option.value));
+    setBccValues(newOptions);
   };
+
+  const { accountId } = UseThreads();
+  const { data: suggestionObjects } = trpc.account.getSuggestions.useQuery({
+    accountId,
+  });
+
+  const suggestions = useMemo(() => {
+    return suggestionObjects?.map((suggestion) => suggestion.address) ?? [];
+  }, [suggestionObjects]);
 
   return (
     <div>
@@ -190,22 +195,27 @@ export default function EmailEditor({
           <div className="space-y-4">
             <TagInput
               label="To"
-              onChange={() => handleToChange}
+              onChange={handleToChange} // Correctly pass the function
               placeholder="Add recipients"
               value={toValueOptions}
+              suggestions={suggestions}
             />
             <TagInput
               label="Cc"
-              onChange={() => handleCcChange}
+              onChange={handleCcChange} // Correctly pass the function
               placeholder="Add recipients"
               value={ccValueOptions}
+              suggestions={suggestions}
             />
-            <TagInput
-              label="Bcc"
-              onChange={() => handleBccChange}
-              placeholder="Add recipients"
-              value={bccValueOptions}
-            />
+            {hasBcc && (
+              <TagInput
+                label="Bcc"
+                onChange={handleBccChange} // Correctly pass the function
+                placeholder="Add recipients"
+                value={bccValueOptions}
+                suggestions={suggestions}
+              />
+            )}
             <Input
               type="text"
               placeholder="Subject"
