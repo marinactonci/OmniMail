@@ -11,24 +11,30 @@ import EditorOptions from "./editor-options";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { BotMessageSquare, File, LoaderCircle, Send } from "lucide-react";
-import { MultiSelect } from "@/components/ui/multi-select";
 import { Input } from "@/components/ui/input";
 import { getEmailCompletion } from "@/lib/ai";
 import UseThreads from "@/hooks/use-threads";
 import AiPromptModal from "./ai-prompt-modal";
+import TagInput from "@/components/ui/tag-input";
+
+type SelectOption = {
+  label: React.JSX.Element;
+  value: string;
+};
 
 type Props = {
-  subject?: string;
-  setSubject?: (subject: string) => void;
-  toValues?: string[];
-  setToValues?: (values: string[]) => void;
-  ccValues?: string[];
-  setCcValues?: (values: string[]) => void;
-  bccValues?: string[];
-  setBccValues?: (values: string[]) => void;
-  to?: string;
-  isSending?: boolean;
-  handleSend?: (value: string) => void;
+  subject: string;
+  setSubject: (subject: string) => void;
+  toValues: SelectOption[];
+  setToValues: (values: string[]) => void;
+  ccValues: SelectOption[];
+  setCcValues: (values: string[]) => void;
+  bccValues: SelectOption[];
+  setBccValues: (values: string[]) => void;
+  to: string[];
+  isSending: boolean;
+  handleSend: (value: string) => void;
+  defaultToolbarExpended: boolean;
 };
 
 export default function EmailEditor({
@@ -43,9 +49,10 @@ export default function EmailEditor({
   to,
   isSending,
   handleSend,
+  defaultToolbarExpended = false,
 }: Props) {
   const [value, setValue] = useState("");
-  const [expended, setExpended] = useState(false);
+  const [expended, setExpended] = useState(defaultToolbarExpended);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const { threadId, threads } = UseThreads();
@@ -91,21 +98,6 @@ export default function EmailEditor({
       setIsGenerating(false);
     }
   };
-
-  const options = [
-    {
-      label: "To",
-      value: "to",
-    },
-    {
-      label: "Cc",
-      value: "cc",
-    },
-    {
-      label: "Bcc",
-      value: "bcc",
-    },
-  ];
 
   const editor = useEditor({
     extensions: [
@@ -154,13 +146,33 @@ export default function EmailEditor({
   });
 
   const send = () => {
-    console.log("Editor value: ", value);
+    editor?.commands?.clearContent();
+    handleSend(value);
   };
 
   const handleAiComplete = (content: string) => {
     if (editor) {
       editor.commands.setContent(content);
     }
+  };
+
+  // Since toValues, ccValues, bccValues are ALREADY SelectOption[],
+  // we no longer need to map them.  Just use them directly.
+  const toValueOptions = toValues ?? [];
+  const ccValueOptions = ccValues ?? [];
+  const bccValueOptions = bccValues ?? [];
+
+  // Handler to convert SelectOption[] back to string[] when TagInput changes
+  const handleToChange = (newOptions: SelectOption[]) => {
+    setToValues(newOptions.map((option) => option.value));
+  };
+
+  const handleCcChange = (newOptions: SelectOption[]) => {
+    setCcValues(newOptions.map((option) => option.value));
+  };
+
+  const handleBccChange = (newOptions: SelectOption[]) => {
+    setBccValues(newOptions.map((option) => option.value));
   };
 
   return (
@@ -176,14 +188,30 @@ export default function EmailEditor({
           }`}
         >
           <div className="space-y-4">
-            <MultiSelect options={options} label="To" />
-            <MultiSelect options={options} label="Cc" />
+            <TagInput
+              label="To"
+              onChange={() => handleToChange}
+              placeholder="Add recipients"
+              value={toValueOptions}
+            />
+            <TagInput
+              label="Cc"
+              onChange={() => handleCcChange}
+              placeholder="Add recipients"
+              value={ccValueOptions}
+            />
+            <TagInput
+              label="Bcc"
+              onChange={() => handleBccChange}
+              placeholder="Add recipients"
+              value={bccValueOptions}
+            />
             <Input
               type="text"
               placeholder="Subject"
               value={subject}
               onChange={(e) => {
-                setSubject && setSubject(e.target.value);
+                setSubject(e.target.value);
               }}
             />
           </div>
@@ -197,7 +225,7 @@ export default function EmailEditor({
           >
             <File className="size-4 text-green-600" />
             <span className="font-medium text-green-600">Draft </span>
-            to Tonči
+            to {to?.join(", ")}
           </Button>
           <Button
             variant={"outline"}
