@@ -81,6 +81,37 @@ export default function SignInPage() {
     );
   }
 
+  async function onSocialSignIn(provider: "google" | "github") {
+    await authClient.signIn.social(
+      {
+        provider: provider,
+        callbackURL: "/mail",
+      },
+      {
+        onRequest: () => {
+          setIsLoading(true);
+        },
+        onSuccess: () => {
+          setIsLoading(false);
+          setIsRedirecting(true);
+          form.reset();
+          form.clearErrors();
+          toast.success("Signed in successfully", {
+            description: "Redirecting to your inbox...",
+            closeButton: true,
+          });
+        },
+        onError: (ctx) => {
+          setIsLoading(false);
+          toast.error("Failed to sign in", {
+            description: ctx.error.message,
+            closeButton: true,
+          });
+        },
+      }
+    );
+  }
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
@@ -177,7 +208,12 @@ export default function SignInPage() {
           </div>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" className="w-1/2">
+          <Button
+            variant="outline"
+            className="w-1/2"
+            disabled={isLoading || isRedirecting}
+            onClick={() => onSocialSignIn("google")}
+          >
             <span className="flex items-center gap-2">
               <Image
                 src="/google.webp"
@@ -188,7 +224,12 @@ export default function SignInPage() {
               <span>Google</span>
             </span>
           </Button>
-          <Button variant="outline" className="w-1/2">
+          <Button
+            variant="outline"
+            className="w-1/2"
+            disabled={isLoading || isRedirecting}
+            onClick={() => onSocialSignIn("github")}
+          >
             <span className="flex items-center gap-2">
               <GithubIcon className="h-5 w-5" />
               <span>Github</span>
