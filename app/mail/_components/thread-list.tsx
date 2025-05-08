@@ -9,7 +9,7 @@ interface Props {
 
 export default function ThreadList({ searchQuery = "" }: Props) {
   const { threads, setThreadId, threadId } = UseThreads();
-  const [, setFocusedIndex] = useState(-1);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
   const threadsRef = useRef<HTMLDivElement>(null);
   const isInitialMount = useRef(true);
 
@@ -46,33 +46,52 @@ export default function ThreadList({ searchQuery = "" }: Props) {
     }
   }, [flatThreads, threadId, setThreadId]);
 
-  // Keyboard navigation code preserved for future reference
-  /*
-  const handleThreadNavigation = useCallback((direction: 'up' | 'down') => {
+  // Keyboard navigation for threads
+  const handleThreadNavigation = React.useCallback((direction: 'up' | 'down') => {
     if (!flatThreads.length) return;
 
-    const newIndex = direction === 'down'
-      ? Math.min(focusedIndex + 1, flatThreads.length - 1)
-      : Math.max(focusedIndex - 1, 0);
+    let newIndex;
+    if (focusedIndex === -1) {
+      if (direction === 'down') {
+        newIndex = 0; // Start from the first thread
+      } else { // direction === 'up'
+        newIndex = flatThreads.length - 1; // Start from the last thread
+      }
+    } else {
+      newIndex = direction === 'down'
+        ? Math.min(focusedIndex + 1, flatThreads.length - 1)
+        : Math.max(focusedIndex - 1, 0);
+    }
 
     setFocusedIndex(newIndex);
-    setThreadId(flatThreads[newIndex].id);
-  }, [flatThreads, focusedIndex, setThreadId]);
+    if (flatThreads[newIndex]) { // Check if thread exists at newIndex
+        setThreadId(flatThreads[newIndex].id);
+    }
+  }, [flatThreads, focusedIndex, setFocusedIndex, setThreadId]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (document.activeElement?.tagName === 'INPUT') return;
+      const activeEl = document.activeElement;
+      // Ignore key events if an input, textarea, select, or contentEditable element is focused
+      if (activeEl instanceof HTMLElement &&
+          (activeEl.tagName === 'INPUT' ||
+           activeEl.tagName === 'TEXTAREA' ||
+           activeEl.tagName === 'SELECT' ||
+           activeEl.isContentEditable)
+         ) {
+        return;
+      }
 
       if (e.key === 'j' || e.key === 'k') {
-        e.preventDefault();
+        e.preventDefault(); // Prevent default browser behavior (e.g., scrolling)
         handleThreadNavigation(e.key === 'j' ? 'down' : 'up');
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
+    // Cleanup: remove event listener when the component unmounts
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleThreadNavigation]);
-  */
 
   // Reset focused index when search query changes
   useEffect(() => {
