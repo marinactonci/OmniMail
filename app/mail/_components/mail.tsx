@@ -14,7 +14,6 @@ import { AccountSwitcher } from "./account-switcher";
 import Sidebar from "./sidebar";
 import ThreadList from "./thread-list";
 import ThreadDisplay from "./thread-display";
-import { useLocalStorage } from "usehooks-ts";
 import { Input } from "@/components/ui/input";
 
 type Props = {
