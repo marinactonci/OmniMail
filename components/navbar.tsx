@@ -2,15 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  Mail,
-  LogIn,
-  User,
-  Home,
-  ChevronDown,
-  LogOut,
-  Settings,
-} from "lucide-react";
+import { Mail, LogIn, User, Home, ChevronDown, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
