@@ -151,7 +151,8 @@ export default function EmailEditor({
 
   const handleAiComplete = (content: string) => {
     if (editor) {
-      editor.commands.setContent(content);
+      // editor.commands.setContent(content);
+      animateText(content, editor); // Use animateText for AI prompt modal completion
     }
   };
 

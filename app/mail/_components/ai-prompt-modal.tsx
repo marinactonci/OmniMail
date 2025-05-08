@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react"; // Import useEffect
 import { generateEmailContent } from "@/lib/ai";
 import { Loader2 } from "lucide-react";
 
@@ -14,6 +14,15 @@ interface Props {
 export default function AiPromptModal({ isOpen, onClose, onComplete }: Props) {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [generatedContent, setGeneratedContent] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isOpen && generatedContent) {
+      onComplete(generatedContent);
+      setGeneratedContent(null); // Reset for next time
+      setPrompt(""); // Clear prompt after completion
+    }
+  }, [isOpen, generatedContent, onComplete]);
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
@@ -21,9 +30,8 @@ export default function AiPromptModal({ isOpen, onClose, onComplete }: Props) {
     try {
       setIsLoading(true);
       const content = await generateEmailContent(prompt);
-      onComplete(content);
-      onClose();
-      setPrompt("");
+      setGeneratedContent(content);
+      onClose(); // Close the modal, useEffect will call onComplete
     } catch (error) {
       console.error("Error generating email:", error);
     } finally {
