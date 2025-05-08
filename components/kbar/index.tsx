@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Action,
   KBarAnimator,
   KBarPortal,
   KBarPositioner,
@@ -9,7 +8,6 @@ import {
   KBarSearch,
 } from "kbar";
 import RenderResults from "./render-results";
-import { useLocalStorage } from "usehooks-ts";
 import useThemeSwitching from "./use-theme-switching";
 import useAccountSwitching from "./use-account-switching";
 import useComposeSwitching from "./use-compose-toggle";

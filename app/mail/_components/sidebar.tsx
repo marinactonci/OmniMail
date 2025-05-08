@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { Nav } from "./nav";
-import { File, Inbox, Pencil, Send } from "lucide-react";
+import { Inbox, Pencil } from "lucide-react";
 import { trpc } from "@/server/client";
 import { Button } from "@/components/ui/button";
 import {

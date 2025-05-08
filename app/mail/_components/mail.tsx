@@ -7,10 +7,8 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
-import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Tabs } from "@radix-ui/react-tabs";
 import { useState, useRef, useEffect } from "react";
 import { AccountSwitcher } from "./account-switcher";
 import Sidebar from "./sidebar";

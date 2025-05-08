@@ -8,7 +8,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useLocalStorage } from "usehooks-ts";
 
 type Props = {
   isCollapsed: boolean;
