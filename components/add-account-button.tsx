@@ -50,14 +50,20 @@ export function AddAccountButton({
           </DialogDescription>
         </DialogHeader>
         <div className="flex gap-4">
-          <Button
-            className="w-1/2 py-6 h-auto flex flex-col gap-2 items-center"
-            variant="outline"
-            onClick={() => handleAddAccount("Google")}
-          >
-            <SiGmail className="h-6 w-6" />
-            Gmail
-          </Button>
+          <div className="relative w-1/2">
+            <Button
+              className="w-full py-6 h-auto flex flex-col gap-2 items-center"
+              variant="outline"
+              onClick={() => handleAddAccount("Google")}
+              disabled
+            >
+              <SiGmail className="h-6 w-6" />
+              Gmail
+            </Button>
+            <div className="absolute inset-0 bg-[rgba(0,0,0,0.5)] flex items-center justify-center rounded-md hover:cursor-default">
+              <span className="text-white text-sm font-semibold">Coming soon</span>
+            </div>
+          </div>
           <Button
             className="w-1/2 py-6 h-auto flex flex-col gap-2 items-center"
             variant="outline"

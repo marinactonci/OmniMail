@@ -15,43 +15,9 @@ import useAccountSwitching from "./use-account-switching";
 import useComposeSwitching from "./use-compose-toggle";
 
 export default function Kbar({ children }: { children: React.ReactNode }) {
-  const [, setTab] = useLocalStorage("tab", "");
-
-  const actions: Action[] = [
-    {
-      id: "inboxAction",
-      name: "Inbox",
-      shortcut: ["g", "i"],
-      section: "Navigation",
-      subtitle: "View your inbox",
-      perform: () => {
-        setTab("inbox");
-      },
-    },
-    {
-      id: "draftAction",
-      name: "Draft",
-      shortcut: ["g", "d"],
-      section: "Navigation",
-      subtitle: "View your drafts",
-      perform: () => {
-        setTab("draft");
-      },
-    },
-    {
-      id: "sentAction",
-      name: "Sent",
-      shortcut: ["g", "s"],
-      section: "Navigation",
-      subtitle: "View your sent items",
-      perform: () => {
-        setTab("sent");
-      },
-    },
-  ];
 
   return (
-    <KBarProvider actions={actions}>
+    <KBarProvider>
       <ActualComponent>{children}</ActualComponent>
     </KBarProvider>
   );

@@ -88,7 +88,6 @@ export const threadRouter = router({
     .input(
       z.object({
         accountId: z.string(),
-        tab: z.enum(["inbox", "draft", "sent"]),
       })
     )
     .query(async ({ input }) => {
@@ -105,19 +104,9 @@ export const threadRouter = router({
         session.user.id
       );
 
-      let filter: Prisma.ThreadWhereInput = {};
-      if (input.tab === "inbox") {
-        filter.inboxStatus = true;
-      } else if (input.tab === "sent") {
-        filter.sentStatus = true;
-      } else if (input.tab === "draft") {
-        filter.draftStatus = true;
-      }
-
       return await prisma.thread.count({
         where: {
           accountId: account.id,
-          ...filter,
         },
       });
     }),

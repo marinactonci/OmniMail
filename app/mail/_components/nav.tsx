@@ -21,8 +21,6 @@ type Props = {
 };
 
 export function Nav({ links, isCollapsed }: Props) {
-  const [, setTab] = useLocalStorage("tab", "inbox");
-
   return (
     <div
       data-collapsed={isCollapsed}
@@ -34,7 +32,6 @@ export function Nav({ links, isCollapsed }: Props) {
             <Tooltip key={index} delayDuration={0}>
               <TooltipTrigger asChild>
                 <span
-                  onClick={() => setTab(link.title.toLowerCase())}
                   className={cn(
                     buttonVariants({ variant: link.variant, size: "icon" }),
                     "h-9 w-9 cursor-pointer",
@@ -58,7 +55,6 @@ export function Nav({ links, isCollapsed }: Props) {
           ) : (
             <span
               key={index}
-              onClick={() => setTab(link.title.toLowerCase())}
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
                 link.variant === "default" &&

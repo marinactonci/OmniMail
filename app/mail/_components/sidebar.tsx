@@ -22,23 +22,13 @@ type Props = {
 
 function Sidebar({ isCollapsed }: Props) {
   const { account, accountId } = UseThreads();
-  const [tab] = useLocalStorage<"inbox" | "draft" | "sent">("tab", "inbox");
   const [isComposeOpen, setIsComposeOpen] = useLocalStorage(
     "isComposeOpen",
     false
   );
 
-  const { data: inboxThreads } = trpc.thread.getNumThreads.useQuery({
+  const { data: threads } = trpc.thread.getNumThreads.useQuery({
     accountId,
-    tab: "inbox",
-  });
-  const { data: draftThreads } = trpc.thread.getNumThreads.useQuery({
-    accountId,
-    tab: "draft",
-  });
-  const { data: sentThreads } = trpc.thread.getNumThreads.useQuery({
-    accountId,
-    tab: "sent",
   });
 
   const [subject, setSubject] = useState("");
@@ -48,9 +38,7 @@ function Sidebar({ isCollapsed }: Props) {
   const [ccValues, setCcValues] = useState<{ label: string; value: string }[]>(
     []
   );
-  const [bccValues] = useState<
-    { label: string; value: string }[]
-  >([]);
+  const [bccValues] = useState<{ label: string; value: string }[]>([]);
 
   const sendEmail = trpc.email.sendEmail.useMutation();
 
@@ -134,21 +122,9 @@ function Sidebar({ isCollapsed }: Props) {
         links={[
           {
             title: "Inbox",
-            label: inboxThreads?.toString() ?? "0",
+            label: threads?.toString() ?? "0",
             icon: Inbox,
-            variant: tab === "inbox" ? "default" : "ghost",
-          },
-          {
-            title: "Draft",
-            label: draftThreads?.toString() ?? "0",
-            icon: File,
-            variant: tab === "draft" ? "default" : "ghost",
-          },
-          {
-            title: "Sent",
-            label: sentThreads?.toString() ?? "0",
-            icon: Send,
-            variant: tab === "sent" ? "default" : "ghost",
+            variant: "default",
           },
         ]}
       />

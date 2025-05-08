@@ -88,65 +88,36 @@ export default function Mail({
             </div>
             <Separator />
             <Sidebar isCollapsed={isCollapsed} />
-            <div className="flex-1"></div>
-            Ask AI
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-          <Tabs defaultValue="inbox">
-            <div className="flex items-center px-4 py-2">
-              <h1 className="text-xl font-bold">Inbox</h1>
-              <TabsList className="ml-auto">
-                <TabsTrigger
-                  value="inbox"
-                  className="text-zinc-600 dark:text-zinc-200"
-                  onClick={() => {
-                    setDone(false);
-                  }}
+          <div className="flex items-center px-4 py-2">
+            <h1 className="text-xl font-bold">Inbox</h1>
+          </div>
+          <Separator />
+          <div className="relative px-4 py-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search emails... (Press '/' to focus)"
+                value={searchQuery}
+                onChange={handleSearch}
+                className="h-10 w-full px-10 text-sm"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
-                  Inbox
-                </TabsTrigger>
-                <TabsTrigger
-                  value="done"
-                  className="text-zinc-600 dark:text-zinc-200"
-                  onClick={() => {
-                    setDone(true);
-                  }}
-                >
-                  Done
-                </TabsTrigger>
-              </TabsList>
+                  <X className="h-4 w-4" />
+                </button>
+              )}
             </div>
-            <Separator />
-            <div className="relative px-4 py-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  ref={searchInputRef}
-                  type="text"
-                  placeholder="Search emails... (Press '/' to focus)"
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="h-10 w-full px-10 text-sm"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
-            </div>
-            <TabsContent value="inbox">
-              <ThreadList searchQuery={searchQuery} />
-            </TabsContent>
-            <TabsContent value="done">
-              <ThreadList searchQuery={searchQuery} />
-            </TabsContent>
-          </Tabs>
+          </div>
+          <ThreadList searchQuery={searchQuery} />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[2]} minSize={30}>
