@@ -38,7 +38,7 @@ function Sidebar({ isCollapsed }: Props) {
   const [ccValues, setCcValues] = useState<{ label: string; value: string }[]>(
     []
   );
-  const [bccValues] = useState<{ label: string; value: string }[]>([]);
+  const [bccValues, setBccValues] = useState<{ label: string; value: string }[]>([]);
 
   const sendEmail = trpc.email.sendEmail.useMutation();
 
@@ -106,6 +106,10 @@ function Sidebar({ isCollapsed }: Props) {
               setToValues={setToValues}
               // @ts-expect-error This is a workaround for the type error
               ccValues={ccValues}
+              // @ts-expect-error This is a workaround for the type error
+              bccValues={bccValues}
+              // @ts-expect-error This is a workaround for the type error
+              setBccValues={setBccValues}
               // @ts-expect-error This is a workaround for the type error
               setCcValues={setCcValues}
               handleSend={handleSubmit}

@@ -25,13 +25,13 @@ const TagInput: React.FC<TagInputProps> = ({ suggestions, defaultValues = [], la
         ), value: suggestion
     }));
 
-    return <div className="border rounded-md flex items-center">
+    return <div className="border dark:border-white/20 rounded-md flex items-center">
         <span className='mx-3 text-sm text-gray-500'>{label}</span>
         <Select
             value={value}
             // @ts-expect-error This is a workaround for the type error
             onChange={onChange}
-            className='w-full flex-1'
+            className='w-full flex-1 dark:!bg-accent'
             isMulti
             onInputChange={setInput}
             defaultValue={defaultValues}
@@ -46,13 +46,22 @@ const TagInput: React.FC<TagInputProps> = ({ suggestions, defaultValues = [], la
             }) : options}
             classNames={{
                 control: () => {
-                    return '!border-none !outline-none !ring-0 !shadow-none focus:border-none focus:outline-none focus:ring-0 focus:shadow-none dark:bg-transparent'
+                    return '!border-none !outline-none !ring-0 !shadow-none focus:border-none focus:outline-none focus:ring-0 focus:shadow-none dark:!bg-accent'
+                },
+                input: () => {
+                    return "dark:!text-white"
                 },
                 multiValue: () => {
                     return 'dark:!bg-gray-700'
                 },
                 multiValueLabel: () => {
-                    return 'dark:text-white dark:bg-gray-700 rounded-md'
+                    return 'dark:!text-white dark:bg-background'
+                },
+                menu: () => {
+                    return 'dark:!bg-accent'
+                },
+                option: (state) => {
+                    return state.isFocused ? 'dark:!bg-gray-700' : 'dark:!bg-accent dark:hover:!bg-gray-700';
                 }
             }}
             classNamePrefix="select"

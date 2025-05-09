@@ -5,7 +5,6 @@ export default function UseThreads() {
   const { data: accounts } = trpc.account.getAccounts.useQuery();
   const [accountId] = useLocalStorage("accountId", "");
   const [threadId, setThreadId] = useLocalStorage("threadId", "");
-  const [tab] = useLocalStorage<"inbox" | "sent" | "draft">("tab", "inbox");
   const [done] = useLocalStorage("done", false);
 
   const {
@@ -15,11 +14,11 @@ export default function UseThreads() {
   } = trpc.thread.getAllThreads.useQuery(
     {
       accountId,
-      tab,
+      tab: "inbox",
       done,
     },
     {
-      enabled: !!accountId && !!tab,
+      enabled: !!accountId,
       placeholderData: (e) => e,
       refetchInterval: 5000,
     }
