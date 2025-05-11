@@ -24,6 +24,8 @@ export async function generateEmailContent(prompt: string): Promise<string> {
 - Use proper paragraph spacing (use double newlines between paragraphs)
 - Not include any html tags or code blocks, just plain text
 - Match the tone to the context
+- Respond in the language of user's prompt
+- Use a clear and professional email structure
 - Include only the final email, no options or explanations
 
 Description: ${prompt}`);
@@ -51,6 +53,8 @@ export async function getEmailCompletion(
 - Flow naturally from the current text
 - Use proper paragraph spacing (use double newlines between paragraphs)
 - Not include any html tags or code blocks, just plain text
+- Respond in the language of provided context
+- Use a clear and professional email structure
 - Only include the continuation text, no explanations or options
 - Consider the context of the previous email when relevant
 
@@ -66,6 +70,8 @@ ${currentText}`
 - Flow naturally from the current text
 - Use proper paragraph spacing (use double newlines between paragraphs)
 - Not include any html tags or code blocks, just plain text
+- Respond in the language current text is in and if there is no current text, respond in English
+- Use a clear and professional email structure
 - Only include the continuation text, no explanations or options
 - Maintain a clear and professional email structure
 
