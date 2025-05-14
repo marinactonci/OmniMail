@@ -10,13 +10,13 @@ Experience the application live at: [https://omni-mail-tm.vercel.app](https://om
 - **Responsive Design:** Optimized for various devices, ensuring a seamless experience across desktops and mobile devices.
 - **Modern UI/UX:** Crafted with Tailwind CSS for a sleek and intuitive interface.
 - **Database Integration:** Utilizes Prisma ORM with PostgreSQL hosted on Neon for efficient data management.
-- **Dockerized Deployment:** Containerized setup for streamlined deployment and scalability.
 
 ## Tech Stack
 - Frontend: Next.js, TypeScript, Tailwind CSS
 - Backend: Next.js API Routes, Prisma ORM, PostgreSQL
 - AI Integration: Incorporates AI models for email generation and autocomplete features.
 - Deployment: Vercel, Neon
+- LLM model: Gemini 2.0 Flash
 
 ## Getting Started
 ### Prerequisites
