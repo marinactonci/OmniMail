@@ -4,6 +4,8 @@ OmniMail is a full-stack web application designed to simplify email composition 
 ## Live Demo
 Experience the application live at: [https://omni-mail-tm.vercel.app](https://omni-mail-tm.vercel.app)
 
+![Screenshot](screenshot.png "Title")
+
 ## Features
 - **AI-Powered Email Composition:** Generate and autocomplete emails using natural language prompts.
 - **User Authentication:** Secure sign-in and sign-up functionalities.
