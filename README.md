@@ -2,7 +2,7 @@
 OmniMail is a full-stack web application designed to simplify email composition and management. Leveraging AI capabilities, it enables users to generate and autocomplete emails using natural language prompts. Built with Next.js, TypeScript, Tailwind CSS, and Prisma, OmniMail offers a modern and efficient user experience.
 
 ## Live Demo
-Experience the application live at: (omni-mail-tm.vercel.app)[omni-mail-tm.vercel.app]
+Experience the application live at: [https://omni-mail-tm.vercel.app](omni-mail-tm.vercel.app)
 
 ## Features
 - **AI-Powered Email Composition:** Generate and autocomplete emails using natural language prompts.
