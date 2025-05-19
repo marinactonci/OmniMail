@@ -15,6 +15,7 @@ import {
 import EmailEditor from "./email-editor";
 import UseThreads from "@/hooks/use-threads";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 type Props = {
   isCollapsed: boolean;
@@ -80,9 +81,9 @@ function Sidebar({ isCollapsed }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="p-2 border-b">
+      <div className="p-2 border-b grid place-items-center">
         <Button
-          className="w-full justify-center gap-2"
+          className={cn(!isCollapsed && "w-full justify-center gap-2")}
           size={isCollapsed ? "icon" : "default"}
           variant="default"
           onClick={() => setIsComposeOpen(true)}
