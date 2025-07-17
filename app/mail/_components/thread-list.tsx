@@ -17,14 +17,22 @@ export default function ThreadList({ searchQuery = "" }: Props) {
     if (!searchQuery) return true;
     const searchLower = searchQuery.toLowerCase();
     if (thread.subject?.toLowerCase().includes(searchLower)) return true;
-    if (thread.emails.some((email) =>
-      email.bodySnippet?.toLowerCase().includes(searchLower) ||
-      email.body?.toLowerCase().includes(searchLower)
-    )) return true;
-    if (thread.emails.some((email) =>
-      email.from?.name?.toLowerCase().includes(searchLower) ||
-      email.from?.address?.toLowerCase().includes(searchLower)
-    )) return true;
+    if (
+      thread.emails.some(
+        (email) =>
+          email.bodySnippet?.toLowerCase().includes(searchLower) ||
+          email.body?.toLowerCase().includes(searchLower)
+      )
+    )
+      return true;
+    if (
+      thread.emails.some(
+        (email) =>
+          email.from?.name?.toLowerCase().includes(searchLower) ||
+          email.from?.address?.toLowerCase().includes(searchLower)
+      )
+    )
+      return true;
     return false;
   });
 
@@ -34,7 +42,9 @@ export default function ThreadList({ searchQuery = "" }: Props) {
   useEffect(() => {
     if (!flatThreads.length) return;
 
-    const currentIndex = threadId ? flatThreads.findIndex(thread => thread.id === threadId) : -1;
+    const currentIndex = threadId
+      ? flatThreads.findIndex((thread) => thread.id === threadId)
+      : -1;
     setFocusedIndex(currentIndex !== -1 ? currentIndex : 0);
   }, [flatThreads, threadId]);
 
@@ -47,50 +57,57 @@ export default function ThreadList({ searchQuery = "" }: Props) {
   }, [flatThreads, threadId, setThreadId]);
 
   // Keyboard navigation for threads
-  const handleThreadNavigation = React.useCallback((direction: 'up' | 'down') => {
-    if (!flatThreads.length) return;
+  const handleThreadNavigation = React.useCallback(
+    (direction: "up" | "down") => {
+      if (!flatThreads.length) return;
 
-    let newIndex;
-    if (focusedIndex === -1) {
-      if (direction === 'down') {
-        newIndex = 0; // Start from the first thread
-      } else { // direction === 'up'
-        newIndex = flatThreads.length - 1; // Start from the last thread
+      let newIndex;
+      if (focusedIndex === -1) {
+        if (direction === "down") {
+          newIndex = 0; // Start from the first thread
+        } else {
+          // direction === 'up'
+          newIndex = flatThreads.length - 1; // Start from the last thread
+        }
+      } else {
+        newIndex =
+          direction === "down"
+            ? Math.min(focusedIndex + 1, flatThreads.length - 1)
+            : Math.max(focusedIndex - 1, 0);
       }
-    } else {
-      newIndex = direction === 'down'
-        ? Math.min(focusedIndex + 1, flatThreads.length - 1)
-        : Math.max(focusedIndex - 1, 0);
-    }
 
-    setFocusedIndex(newIndex);
-    if (flatThreads[newIndex]) { // Check if thread exists at newIndex
+      setFocusedIndex(newIndex);
+      if (flatThreads[newIndex]) {
+        // Check if thread exists at newIndex
         setThreadId(flatThreads[newIndex].id);
-    }
-  }, [flatThreads, focusedIndex, setFocusedIndex, setThreadId]);
+      }
+    },
+    [flatThreads, focusedIndex, setFocusedIndex, setThreadId]
+  );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const activeEl = document.activeElement;
       // Ignore key events if an input, textarea, select, or contentEditable element is focused
-      if (activeEl instanceof HTMLElement &&
-          (activeEl.tagName === 'INPUT' ||
-           activeEl.tagName === 'TEXTAREA' ||
-           activeEl.tagName === 'SELECT' ||
-           activeEl.isContentEditable)
-         ) {
+      if (
+        activeEl instanceof HTMLElement &&
+        (activeEl.tagName === "INPUT" ||
+          activeEl.tagName === "TEXTAREA" ||
+          activeEl.tagName === "SELECT" ||
+          activeEl.isContentEditable)
+      ) {
         return;
       }
 
-      if (e.key === 'j' || e.key === 'k') {
+      if (e.key === "j" || e.key === "k") {
         e.preventDefault(); // Prevent default browser behavior (e.g., scrolling)
-        handleThreadNavigation(e.key === 'j' ? 'down' : 'up');
+        handleThreadNavigation(e.key === "j" ? "down" : "up");
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
     // Cleanup: remove event listener when the component unmounts
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleThreadNavigation]);
 
   // Reset focused index when search query changes
@@ -99,7 +116,10 @@ export default function ThreadList({ searchQuery = "" }: Props) {
   }, [searchQuery]);
 
   const groupedThreads = filteredThreads?.reduce((acc, thread) => {
-    const date = format(thread.emails[0]?.sentAt ?? new Date(), "MMMM dd, yyyy");
+    const date = format(
+      thread.emails[0]?.sentAt ?? new Date(),
+      "MMMM dd, yyyy"
+    );
     if (!acc[date]) {
       acc[date] = [];
     }
@@ -135,10 +155,7 @@ export default function ThreadList({ searchQuery = "" }: Props) {
                 {date}
               </div>
               {threads.map((thread) => (
-                <ThreadItem
-                  key={thread.id}
-                  thread={thread}
-                />
+                <ThreadItem key={thread.id} thread={thread} />
               ))}
             </React.Fragment>
           );

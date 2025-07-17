@@ -3,7 +3,6 @@ import { procedure, router } from "../trpc";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
-import { sub } from "date-fns";
 import { emailAddressSchema } from "@/schemas/emailAddress";
 import { authorizeAccountAccess } from "@/lib/authorize-account-access";
 import { Account } from "@/lib/account";
@@ -78,6 +77,6 @@ export const emailRouter = router({
         replyTo: input.replyTo,
         from: input.from,
         inReplyTo: input.inReplyTo,
-    })
+      });
     }),
 });

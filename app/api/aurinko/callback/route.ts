@@ -56,7 +56,7 @@ export const GET = async (req: NextRequest) => {
       emailAddress: accountDetails.email,
       name: accountDetails.name,
       accessToken: token.accessToken,
-      provider: params.get("serviceType")!
+      provider: params.get("serviceType")!,
     },
   });
 
@@ -105,19 +105,28 @@ const exchangeCodeForAccessToken = async (code: string) => {
       retryCount++;
       if (axios.isAxiosError(error)) {
         // If it's a timeout or 5xx error, retry
-        if (error.code === 'ECONNABORTED' || (error.response && error.response.status >= 500)) {
-          console.log(`Attempt ${retryCount}/${maxRetries} failed. Retrying in ${retryCount * 1000}ms...`);
+        if (
+          error.code === "ECONNABORTED" ||
+          (error.response && error.response.status >= 500)
+        ) {
+          console.log(
+            `Attempt ${retryCount}/${maxRetries} failed. Retrying in ${
+              retryCount * 1000
+            }ms...`
+          );
           // Wait before retrying (exponential backoff)
-          await new Promise(resolve => setTimeout(resolve, retryCount * 1000));
+          await new Promise((resolve) =>
+            setTimeout(resolve, retryCount * 1000)
+          );
           continue;
         }
-        console.error('API Error:', error.response?.data);
+        console.error("API Error:", error.response?.data);
       }
-      console.error('Error exchanging code for token:', error);
+      console.error("Error exchanging code for token:", error);
 
       // If we've exhausted all retries or it's not a retryable error, return null
       if (retryCount >= maxRetries) {
-        console.error('Max retries reached. Giving up.');
+        console.error("Max retries reached. Giving up.");
         return null;
       }
     }

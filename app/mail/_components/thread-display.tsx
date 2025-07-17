@@ -8,7 +8,10 @@ import ReplyBox from "./reply-box";
 
 export default function ThreadDisplay() {
   const { threadId, threads } = UseThreads();
-  const thread = useMemo(() => threads?.find((t) => t.id === threadId), [threadId, threads]);
+  const thread = useMemo(
+    () => threads?.find((t) => t.id === threadId),
+    [threadId, threads]
+  );
 
   // Memoize the email displays to prevent unnecessary re-renders
   const emailDisplays = useMemo(() => {
@@ -57,13 +60,9 @@ export default function ThreadDisplay() {
             </div>
             <Separator />
             <div className="flex-1 overflow-auto">
-              <div className="p-4 flex flex-col gap-4">
-                {emailDisplays}
-              </div>
+              <div className="p-4 flex flex-col gap-4">{emailDisplays}</div>
             </div>
-            <div className="p-4 pb-2">
-              {memoizedReplyBox}
-            </div>
+            <div className="p-4 pb-2">{memoizedReplyBox}</div>
           </div>
         </>
       ) : (

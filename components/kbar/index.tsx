@@ -13,7 +13,6 @@ import useAccountSwitching from "./use-account-switching";
 import useComposeSwitching from "./use-compose-toggle";
 
 export default function Kbar({ children }: { children: React.ReactNode }) {
-
   return (
     <KBarProvider>
       <ActualComponent>{children}</ActualComponent>

@@ -73,9 +73,9 @@ export const threadRouter = router({
                   size: true,
                   inline: true,
                   contentId: true,
-                  contentLocation: true
-                }
-              }
+                  contentLocation: true,
+                },
+              },
             },
           },
         },

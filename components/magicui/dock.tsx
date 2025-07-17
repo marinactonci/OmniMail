@@ -27,7 +27,7 @@ const DEFAULT_MAGNIFICATION = 60;
 const DEFAULT_DISTANCE = 140;
 
 const dockVariants = cva(
-  "mx-auto mt-8 flex h-[58px] w-max items-center justify-center gap-2 rounded-2xl border border-neutral-400 dark:border-neutral-600 p-2 shadow-lg backdrop-blur-md supports-backdrop-blur:bg-neutral-300/50 supports-backdrop-blur:dark:bg-neutral-700/50",
+  "mx-auto mt-8 flex h-[58px] w-max items-center justify-center gap-2 rounded-2xl border border-neutral-400 dark:border-neutral-600 p-2 shadow-lg backdrop-blur-md supports-backdrop-blur:bg-neutral-300/50 supports-backdrop-blur:dark:bg-neutral-700/50"
 );
 
 const Dock = React.forwardRef<HTMLDivElement, DockProps>(
@@ -41,7 +41,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
       direction = "middle",
       ...props
     },
-    ref,
+    ref
   ) => {
     const mouseX = useMotionValue(Infinity);
 
@@ -50,7 +50,8 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
         if (React.isValidElement(childNode) && childNode.type === DockIcon) {
           // After the checks, childNode is known to be a ReactElement of type DockIcon.
           // Cast to specific type for cloneElement and props access.
-          const dockIconElement = childNode as React.ReactElement<DockIconProps>;
+          const dockIconElement =
+            childNode as React.ReactElement<DockIconProps>;
           return React.cloneElement(dockIconElement, {
             ...dockIconElement.props, // Now spreading DockIconProps
             mouseX: mouseX,
@@ -78,7 +79,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
         {renderChildren()}
       </motion.div>
     );
-  },
+  }
 );
 
 Dock.displayName = "Dock";
@@ -115,7 +116,7 @@ const DockIcon = ({
   const sizeTransform = useTransform(
     distanceCalc,
     [-distance, 0, distance],
-    [size, magnification, size],
+    [size, magnification, size]
   );
 
   const scaleSize = useSpring(sizeTransform, {
@@ -130,7 +131,7 @@ const DockIcon = ({
       style={{ width: scaleSize, height: scaleSize, padding }}
       className={cn(
         "flex aspect-square cursor-pointer items-center justify-center rounded-full",
-        className,
+        className
       )}
       {...props}
     >

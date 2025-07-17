@@ -6,29 +6,32 @@ import React from "react";
 
 function Footer() {
   // Add smooth scroll handler
-  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleSmoothScroll = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
     e.preventDefault();
 
     if (href === "#top") {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
-      window.history.pushState(null, '', '#');
+      window.history.pushState(null, "", "#");
       return;
     }
 
-    const targetId = href.replace('#', '');
+    const targetId = href.replace("#", "");
     const element = document.getElementById(targetId);
 
     if (element) {
       element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+        behavior: "smooth",
+        block: "start",
       });
 
       // Update URL without page jump
-      window.history.pushState(null, '', href);
+      window.history.pushState(null, "", href);
     }
   };
 

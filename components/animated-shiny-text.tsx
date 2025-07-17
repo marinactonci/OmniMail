@@ -3,7 +3,7 @@ import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
 
 type Props = {
   text: string;
-}
+};
 
 export function AnimatedShinyTextDemo({ text }: Props) {
   return (

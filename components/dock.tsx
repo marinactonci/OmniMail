@@ -1,6 +1,12 @@
 "use client";
 
-import { CreditCard, Layers, MessageSquareQuote, Workflow, ArrowUp } from "lucide-react";
+import {
+  CreditCard,
+  Layers,
+  MessageSquareQuote,
+  Workflow,
+  ArrowUp,
+} from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState, useRef } from "react";
 import { buttonVariants } from "@/components/ui/button";
@@ -30,7 +36,7 @@ export function DockNav() {
   const dockRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const footer = document.querySelector('footer');
+    const footer = document.querySelector("footer");
     if (!footer || !dockRef.current) return;
 
     const observer = new IntersectionObserver(
@@ -39,8 +45,8 @@ export function DockNav() {
         setIsVisible(!entry.isIntersecting);
       },
       {
-        rootMargin: '100px 0px 0px 0px', // Adjust this value as needed
-        threshold: 0
+        rootMargin: "100px 0px 0px 0px", // Adjust this value as needed
+        threshold: 0,
       }
     );
 
@@ -52,29 +58,32 @@ export function DockNav() {
   }, []);
 
   // Add smooth scroll handler
-  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleSmoothScroll = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
     e.preventDefault();
 
     if (href === "#top") {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
-      window.history.pushState(null, '', '#');
+      window.history.pushState(null, "", "#");
       return;
     }
 
-    const targetId = href.replace('#', '');
+    const targetId = href.replace("#", "");
     const element = document.getElementById(targetId);
 
     if (element) {
       element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+        behavior: "smooth",
+        block: "start",
       });
 
       // Update URL without page jump
-      window.history.pushState(null, '', href);
+      window.history.pushState(null, "", href);
     }
   };
 

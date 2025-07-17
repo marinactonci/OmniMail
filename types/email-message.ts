@@ -45,4 +45,4 @@ export type EmailMessage = {
   omitted: Array<
     "threadId" | "body" | "attachments" | "recipients" | "internetHeaders"
   >;
-}
+};

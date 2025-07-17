@@ -39,7 +39,9 @@ function Sidebar({ isCollapsed }: Props) {
   const [ccValues, setCcValues] = useState<{ label: string; value: string }[]>(
     []
   );
-  const [bccValues, setBccValues] = useState<{ label: string; value: string }[]>([]);
+  const [bccValues, setBccValues] = useState<
+    { label: string; value: string }[]
+  >([]);
 
   const sendEmail = trpc.email.sendEmail.useMutation();
 

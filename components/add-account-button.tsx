@@ -14,11 +14,9 @@ import { SiGmail } from "react-icons/si";
 
 type Props = {
   asDropdownItem?: boolean;
-}
+};
 
-export function AddAccountButton({
-  asDropdownItem = false,
-}: Props) {
+export function AddAccountButton({ asDropdownItem = false }: Props) {
   const handleAddAccount = async (provider: "Google" | "Office365") => {
     const authUrl = await getAurinkoAuthUrl(provider);
     window.location.href = authUrl;
@@ -61,7 +59,9 @@ export function AddAccountButton({
               Gmail
             </Button>
             <div className="absolute inset-0 bg-[rgba(0,0,0,0.5)] flex items-center justify-center rounded-md hover:cursor-default">
-              <span className="text-white text-sm font-semibold">Coming soon</span>
+              <span className="text-white text-sm font-semibold">
+                Coming soon
+              </span>
             </div>
           </div>
           <Button

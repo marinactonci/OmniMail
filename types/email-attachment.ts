@@ -7,4 +7,4 @@ export type EmailAttachment = {
   contentId?: string;
   content?: string;
   contentLocation?: string;
-}
+};
