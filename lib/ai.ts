@@ -14,7 +14,7 @@ export async function generateEmailContent(prompt: string): Promise<string> {
     throw new Error("Unauthorized");
   }
 
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
   const result =
     await model.generateContent(`You are a professional email writing assistant. Write a single, well-formatted email based on this description. The email should:
