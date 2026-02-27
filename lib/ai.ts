@@ -43,7 +43,7 @@ export async function getEmailCompletion(
     throw new Error("Unauthorized");
   }
 
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
   const prompt = contextEmail
     ? `You are a professional email writing assistant. Continue this email based on the previous context and current text. The continuation should:
